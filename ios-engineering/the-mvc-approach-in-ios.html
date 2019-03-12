@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<!--
+	Editorial by HTML5 UP
+	html5up.net | @ajlkn
+	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+-->
+<html>
+  <head>
+    <title>The MVC Approach in iOS</title>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, user-scalable=no"
+    />
+    <link rel="stylesheet" href="../assets/css/main.css" />
+  </head>
+  <body class="is-preload">
+    <!-- Wrapper -->
+    <div id="wrapper">
+      <!-- Main -->
+      <div id="main">
+        <div class="inner">
+          <!-- Header -->
+          <header id="header">
+            <a href="#" class="logo"><strong>Articles</strong> by Cyril</a>
+            <ul class="icons">
+              <li>
+                <a
+                  href="https://www.linkedin.com/in/cyrilivargarcia/"
+                  class="icon fa-twitter"
+                  ><span class="label">Twitter</span></a
+                >
+              </li>
+              <li>
+                <a
+                  href="https://twitter.com/cyrilivargarcia"
+                  class="icon fa-linkedin"
+                  ><span class="label">LinkedIn</span></a
+                >
+              </li>
+              <li>
+                <a
+                  href="https://github.com/cyrilivargarcia"
+                  class="icon fa-github"
+                  ><span class="label">GitHub</span></a
+                >
+              </li>
+
+              <li>
+                <a href="https://bycyril.com/" class="icon fa-html5"
+                  ><span class="label">Web</span></a
+                >
+              </li>
+            </ul>
+          </header>
+
+          <!-- Content -->
+          <section>
+            <header class="main">
+              <h1>The MVC Approach in iOS</h1>
+            </header>
+
+            <span class="image main"
+              ><img
+                src="https://cdn-images-1.medium.com/max/1600/1*eX5l_Or_yobBfgzYhdYofQ.jpeg"
+                alt=""
+            /></span>
+            <h2>Introduction</h2>
+            <p>
+              MVC is an architectural pattern of breaking up your code into
+              three different parts; Model-View-Controller. It’s a popular
+              architecture because it separates your user interface code from
+              your logic code; therefor making it easier to update, grow, and to
+              find bugs when they occure.
+            </p>
+
+            <hr class="major" />
+            <h2>Summary</h2>
+            <p>
+              A brief summary of the three different parts.
+              <br />
+              <br />
+              Model — The Model is where most of your logic and data process is
+              being handled.
+              <br />
+              <br />
+              View — Your UI elements will live inside of this class. It is also
+              referred to as the dummy class because it does not contain any
+              logic.
+              <br />
+              <br />
+              Controller — This is where the interaction between your model and
+              your view will take place. The controller manages those
+              interectations.
+              <br />
+              <br />
+              In iOS Development it may be tempting to write all your code
+              inside the ViewController; in fact you probably practiced that if
+              you are a self-taught developer. In this article, I’m going to
+              demonstrate how to do this by creating a registration part of an
+              app.
+              <br />
+              <br />
+                I like to do this programmatically. So if you are following,
+                delete the Storyboard file and make sure to leave the Main
+                Interface selection blank from your project settings and
+                initialize the rootViewController in your
+                <code>AppDelegate.swift</code>
+              </b>
+            </p>
+
+            <hr class="major" />
+            <h2>Setup</h2>
+            <p>
+              I will create three files: <code>Register</code>
+              <code>RegisterView</code> and a <code>MainController</code>. Our
+              Register class will act as our Model, which will contain all of
+              our logic. The RegisterView will act as our View and will contain
+              all our User Interface elements and our MainController will host
+              our RegisterView.
+            </p>
+
+            <hr class="major" />
+            <h2>Register - Model</h2>
+            <p>
+              In this class, we will take in the users username and password. We
+              want to add some restrictions to how the passwords are formatter.
+              First, I want the password to be at least 6 characters in length
+              and the password and confirm password must be the same before
+              proceeding.
+              <center>
+                <b>We are not using a database to save any information.</b>
+              </center>
+            </p>
+            <p>
+              First, let’s setup our initializer that will take in the username,
+              password, and confirm password. After that, I want three
+              functions. 
+              
+           <pre><code>   
+validatePasswordLength()
+
+validatePasswordAndConfirmPassword() 
+                
+completeRegistration() 
+            </code></pre>
+             
+              
+              The <code>validatePasswordLength()</code> will throw an error if it is less than 5
+              characters. The <code>validatePasswordAndConfirmPassword()</code> will also
+              throw an error if the password and confirm password fields are not equal. The <code>completeRegistration()</code>
+              function will call both the <code>validatePasswordLength()</code> and
+              <code>validatePasswordAndConfirmPassword()</code> functions in a try block.
+            </p>
+            <p>
+                    Because we are using doing error handling with try blocks, we need an enum of the different errors we will have.
+                    <pre><code>
+enum Validation: Error {
+    case passwordTooShort
+    case passwordsDontMatch
+}
+                </code>
+                </pre>
+                    <p>
+                    Your code should look something like this:
+                </p>
+            <pre><code>
+import UIKit
+
+class Register {
+    
+    private var username: String!
+    private var password: String!
+    private var confirmPassword: String!
+    
+    // Different errors
+    enum Validation: Error {
+        case passwordTooShort
+        case passwordDontMatch
+    }
+    
+    // Constructor
+    init(_ username: String, _ password: String, _ confirmPassword: String) {
+        self.username = username
+        self.password = password
+        self.confirmPassword = confirmPassword
+    }
+    
+    // Checks if password has length 6 or more
+    private func validatePasswordLength() throws {
+        if self.password.count < 5 {
+            throw Validation.passwordTooShort
+        }
+    }
+    
+    // Checks if password.text == confirmPassword.text
+    private func validatePasswordEquality() throws {
+        if self.password != self.confirmPassword {
+            throw Validation.passwordDontMatch
+        }
+    }
+    
+    // Performs the registration action
+    public func completeRegistration(completion: (_ success: String) -> Void) {
+        
+        do {
+            try self.validatePasswordEquality()
+            try self.validatePasswordLength()
+            completion("Register Complete!")
+        } catch Validation.passwordDontMatch {
+            print("Passwords don't match")
+        } catch Validation.passwordTooShort {
+            print("Password must be minimum of 6 characters")
+        } catch {
+            print(error.localizedDescription)
+        }   
+    }    
+}
+            </code></pre>
+            </p>
+
+            <hr class='major'/>
+            <h2>RegisterView - View</h2>
+            <p>As mentioned before, this class will contain our UI elements. For this registration page, we want to ask the user for username and password. We also want another password field to confirm the password. So we need three total UITextFields. We also need a button that will perform the registration action.</p>
+            <p>Because we are good developers, we will follow industry standard practices. We will create a four functions.
+
+                <pre><code>
+viewSetup()
+
+addViews()
+
+getTexts()
+
+doneButtonAddTarget()
+                </code></pre>
+                Inside the <code>viewSetup()</code> function, we want to create our elements programmatically. After doing that, instead of adding the elements inside the same function, do that in the <code>addViews()</code> function. The <code>getTexts()</code> function will allow us to read text from our textfields functionally to keep the integrity of our textfields. Lastly, the <code>doneButtonAddTarget()</code> will allow us to add actions from our MainController.
+            </p>
+
+            <p>Your RegisterView should look something like this below:</p>
+
+            <pre><code>
+import UIKit
+
+class RegisterView: UIView {
+    
+    private var usernameField: UITextField!
+    private var passwordField: UITextField!
+    private var confirmPasswordField: UITextField!
+    
+    private var doneButton: UIButton!
+            
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        self.viewSetup()
+        self.addToScene()       
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    // This function is where you create your UI elements. You can also create custom UITextField classes if you'd like.
+    private func viewSetup() {
+        self.usernameField = {
+            let textfield = UITextField()
+            textfield.frame.size = CGSize(width: self.frame.size.width - 50, height: 50)
+            textfield.center = CGPoint(x: self.frame.size.width / 2, y: self.frame.size.height * 0.25)
+            textfield.backgroundColor = UIColor.white
+            textfield.textColor = UIColor.black
+            textfield.placeholder = "Username"
+            return textfield
+        }()
+        
+        self.passwordField = {
+            let textfield = UITextField()
+            textfield.frame.size = CGSize(width: self.frame.size.width - 50, height: 50)
+            textfield.center = CGPoint(x: self.frame.size.width / 2, y: self.frame.size.height * 0.35)
+            textfield.backgroundColor = UIColor.white
+            textfield.textColor = UIColor.black
+            textfield.placeholder = "Password"
+            textfield.isSecureTextEntry = true
+            return textfield
+        }()
+        
+        self.confirmPasswordField = {
+            let textfield = UITextField()
+            textfield.frame.size = CGSize(width: self.frame.size.width - 50, height: 50)
+            textfield.center = CGPoint(x: self.frame.size.width / 2, y: self.frame.size.height * 0.45)
+            textfield.backgroundColor = UIColor.white
+            textfield.textColor = UIColor.black
+            textfield.placeholder = "Confirm Password"
+            textfield.isSecureTextEntry = true
+            return textfield
+        }()
+        
+        self.doneButton = {
+            let button = UIButton()
+            button.frame.size = CGSize(width: 120, height: 50)
+            button.center = CGPoint(x: self.frame.size.width / 2, y: self.frame.size.height * 0.55)
+            button.setTitle("Done", for: .normal)
+            button.setTitleColor(UIColor.blue, for: .normal)
+            button.layer.borderWidth = 1
+            button.layer.borderColor = UIColor.blue.cgColor
+            button.addTarget(self, action: #selector(RegisterView.registerAction), for: .touchUpInside)
+            return button
+        }() 
+    }
+    
+    // Use a separate function to add the elements to your view.
+    private func addToScene() {
+        self.addSubview(self.usernameField)
+        self.addSubview(self.passwordField)
+        self.addSubview(self.confirmPasswordField)
+        self.addSubview(self.doneButton)
+    }
+    
+    // This function will allow us to get the text from our textfields, 
+    // without the ability to modify the textfields outside of this class
+    private func getTexts() -> (username: String?, password: String?, confirmPassword: String?) {
+        return (self.usernameField.text, self.passwordField.text, self.confirmPasswordField.text)
+    }
+    
+    // This will allow us to add actions from our MainController class.
+    public func doneButtonAddTarget(_ vc: UIViewController, action: Selector, for event: UIControl.Event) {
+        self.doneButton.addTarget(vc, action: action, for: event)
+    }
+        
+}
+            </code></pre>
+
+            <hr class='major'/>
+            <h2>MainController - Controller</h2>
+            <p>Lastly, We want to append the <code>RegisterView</code> class onto our <code>MainController</code> class and create the action that would allow the user to register. We use the <code>getTexts()</code> function from the <code>RegisterView</code> class and pass them to our <code>Register</code> class.</p>
+            <pre><code>
+import UIKit
+
+class MainController: UIViewController {
+    
+    var register: Register!
+    var registerView: RegisterView!
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        // Initialize the RegisterView
+        self.registerView = RegisterView(frame: self.view.frame)
+        // Add the registerAction to your doneButton from your RegisterView class
+        self.registerView.doneButtonAddTarget(self, action: #selector(MainController.registerAction), for: .touchUpInside)
+        // Append the registerView to your MainController
+        self.view.addSubview(self.registerView)        
+    }
+    
+    @objc func registerAction() {
+        // Get the text you need from the getTexts() class
+        let username = self.registerView.getTexts().username!
+        let password = self.registerView.getTexts().password!
+        let confirmPassword = self.registerView.getTexts().confirmPassword!
+        
+        // Initialize the Register class and pass the username and passwords
+        self.register = Register(username, password, confirmPassword)
+        
+        // Call the register function with the completion block.
+        self.register.completeRegistration { (message) in
+            // It will tell if the registration was successful or not                               
+            print(message)
+        }
+    }
+    
+}
+            </code></pre>
+            
+            <hr class='major'>
+            <h2>Conclusion</h2>
+            <p>You could see how clean and organized our code is and how we separate our UI elements and our logic. It may seem unnecessary for a small app like this, but it is to your benefit to practice this architecture when building a large scale app.
+            <br>
+            <br>
+                If you want to transition between views, you could animate one view to another. In my opinion, it’s easier to animate transitions between views than ViewControllers.
+            <br>  
+            <br>      
+            You can download the full source code <a href='https://github.com/cyrilivargarcia/Hello_MVC'>here</a> for your reference.</p>
+
+          </section>
+        </div>
+      </div>
+
+      <!-- Sidebar -->
+      <div id="sidebar">
+        <div class="inner">
+          <!-- Menu -->
+          <nav id="menu">
+            <header class="major">
+              <h2>Menu</h2>
+            </header>
+            <ul>
+              <li><a href="../index.html">Home</a></li>
+              <li><a href="../ios-engineering.html">iOS Engineering</a></li>
+              <li>
+                <a href="../artificial-intelligence.html"
+                  >Artificial Intelligence</a
+                >
+              </li>
+              <li>
+                <a href="../statistics-and-data-science.html"
+                  >Statistics and Data Science</a
+                >
+              </li>
+              <li><a href="../blog.html">Blog</a></li>
+            </ul>
+          </nav>
+
+          <!-- Section -->
+          <section>
+            <header class="major">
+              <h2>Projects by Cyril</h2>
+            </header>
+            <div class="mini-posts">
+              <article>
+                <a href="#" class="image"
+                  ><img src="../images/memo.jpeg" alt=""
+                /></a>
+                <h2>Memo</h2>
+                <p>
+                  Take and organize notes like text messages.
+                </p>
+              </article>
+              <article>
+                <a href="#" class="image"
+                  ><img src="../images/geekweather.jpeg" alt=""
+                /></a>
+                <h2>GeekWeather</h2>
+
+                <p>
+                  A simple weather app with an aesthetically user interface.
+                </p>
+              </article>
+              <article>
+                <a href="#" class="image"
+                  ><img src="../images/filestorks.jpeg" alt=""
+                /></a>
+                <h2>FileStorks.com</h2>
+
+                <p>
+                  A quick and easy way to share files.
+                </p>
+              </article>
+            </div>
+          </section>
+
+          <!-- Section -->
+          <section>
+            <header class="major">
+              <h2>Connect with me!</h2>
+            </header>
+            <p>
+              Open to collaboration opportunities, topic suggestions, or any
+              questions!
+            </p>
+            <ul class="contact">
+              <li class="fa-envelope">
+                <a href="#">garciacy at bycyril dot com</a>
+              </li>
+              <li class="fa-twitter">
+                <a href="https://twitter.com/cyrilivargarcia"
+                  >@cyrilivargarcia</a
+                >
+              </li>
+              <li class="fa-linkedin">
+                <a href="https://www.linkedin.com/in/cyrilivargarcia/"
+                  >in/cyrilivargarcia</a
+                >
+              </li>
+            </ul>
+          </section>
+
+          <!-- Footer -->
+        </div>
+      </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="../assets/js/jquery.min.js"></script>
+    <script src="../assets/js/browser.min.js"></script>
+    <script src="../assets/js/breakpoints.min.js"></script>
+    <script src="../assets/js/util.js"></script>
+    <script src="../assets/js/main.js"></script>
+  </body>
+</html>
