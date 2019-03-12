@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<!--
+	Editorial by HTML5 UP
+	html5up.net | @ajlkn
+	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+-->
+<html>
+  <head>
+    <title>Optionals in Swift</title>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, user-scalable=no"
+    />
+    <link rel="stylesheet" href="../assets/css/main.css" />
+  </head>
+  <body class="is-preload">
+    <!-- Wrapper -->
+    <div id="wrapper">
+      <!-- Main -->
+      <div id="main">
+        <div class="inner">
+          <!-- Header -->
+          <header id="header">
+            <a href="#" class="logo"><strong>Articles</strong> by Cyril</a>
+            <ul class="icons">
+              <li>
+                <a
+                  href="https://twitter.com/cyrilivargarcia"
+                  class="icon fa-twitter"
+                  ><span class="label">Twitter</span></a
+                >
+              </li>
+              <li>
+                <a
+                  href="https://www.linkedin.com/in/cyrilivargarcia/"
+                  class="icon fa-linkedin"
+                  ><span class="label">LinkedIn</span></a
+                >
+              </li>
+              <li>
+                <a
+                  href="https://github.com/cyrilivargarcia"
+                  class="icon fa-github"
+                  ><span class="label">GitHub</span></a
+                >
+              </li>
+
+              <li>
+                <a href="https://bycyril.com/" class="icon fa-html5"
+                  ><span class="label">Web</span></a
+                >
+              </li>
+            </ul>
+          </header>
+
+          <!-- Content -->
+          <section>
+            <header class="main">
+              <h1>Optionals in Swift</h1>
+            </header>
+
+            <span class="image main"
+              ><img
+                src="http://www.developersacademy.org/blog/wp-content/uploads/2018/05/wc-swift.jpg"
+                alt=""
+            /></span>
+            <h2>Introduction</h2>
+            <p>
+              One of the things that separate Swift from other languages is the
+              ability to recognize optionals. Optionals in Swift allow you to
+              have full control of your functions and variables. The main idea
+              around optionals is that a variable or function can have two
+              states: it can either have a value or not. The significance of
+              this is that we can have functions return a nil instead of an
+              arbitrary predefined value to represent a nil.
+            </p>
+            <p>
+              For example: Given a list of customers, return the 100th customer.
+              What if the 100th customer doesn’t exist? We can represent the
+              nullity by some arbitrary value, but it would make sense to return
+              a nil instead of a predefined value.
+            </p>
+            <p>
+              Take this other example. Given a list of numbers, find the largest
+              number. Without optionals, we would have to return a predefined
+              value that would represent a non existent large number. We can
+              represent this as -1. The problem with predefined values is that
+              it can sometimes be the true value.
+            </p>
+            <p>
+              In this example, this would work if you are given an empty list.
+              What if you are given a list of negative numbers from -10 to -1.
+              In this case, the largest number would be -1. However, -1 is
+              predefined as a nullity.
+            </p>
+            <p>
+              While these simple cases may not illustrate the full advantage of
+              optionals, it is the elegance of handling nullity that makes your
+              code cleaner and readable.
+            </p>
+            <hr class="major" />
+
+            <h2>Best Practices</h2>
+            <p>
+              When working with optionals, it is ideal to never force-unwrap
+              your variables unless you are 110% certain that you will never
+              encounter an unexpected nil while unwrapping an optional error.
+              The other exception is when creating IBOutlets because your
+              outlets should be connected to your storyboards at all times.
+            </p>
+            <hr class="major" />
+
+            <h2>Safe Unwrapping</h2>
+            <p>
+              Swift safe unwrapping features that can make your code look cool.
+              There are two types: <code>guard let</code> and
+              <code>if let</code>.
+            </p>
+            <p>
+              An <code>if let statement</code> takes an optional value if it
+              exists and assigns it to a new variable and you can proceed to
+              what you want to do with that value.
+            </p>
+            <p><b>For Example</b></p>
+            <pre><code>
+if let username = user.username {
+    // If the username exists, we use it
+    self.title = username
+} else {
+    // otherwise, we set a placeholder
+    self.title = “No Username”
+}  
+            </code></pre>
+            <p>
+              A <code>guard let statement</code> is the opposite of an
+              <code>if let</code>. A <code>guard let</code>
+              allows us to break out of a function whenever a nil was caught.
+              Otherwise, we proceed with the value that was found.
+            </p>
+            <p><b>For Example</b></p>
+            <pre><code>
+func setUsername() {
+    // If the username exists, we proceed. Othese, we breakout of the function.
+    guard let username = user.username else { return } 
+    self.title = username
+}   
+            </code></pre>
+          </section>
+        </div>
+      </div>
+
+      <!-- Sidebar -->
+      <div id="sidebar">
+        <div class="inner">
+          <!-- Menu -->
+          <nav id="menu">
+            <header class="major">
+              <h2>Menu</h2>
+            </header>
+            <ul>
+              <li><a href="../index.html">Home</a></li>
+              <li><a href="../ios-engineering.html">iOS Engineering</a></li>
+              <li>
+                <a href="../artificial-intelligence.html"
+                  >Artificial Intelligence</a
+                >
+              </li>
+              <li>
+                <a href="../statistics-and-data-science.html"
+                  >Statistics and Data Science</a
+                >
+              </li>
+              <li><a href="../blog.html">Blog</a></li>
+            </ul>
+          </nav>
+
+          <!-- Section -->
+          <section>
+            <header class="major">
+              <h2>Projects by Cyril</h2>
+            </header>
+            <div class="mini-posts">
+              <article>
+                <a href="#" class="image"
+                  ><img src="../images/memo.jpeg" alt=""
+                /></a>
+                <h2>Memo</h2>
+                <p>
+                  Take and organize notes like text messages.
+                </p>
+              </article>
+              <article>
+                <a href="#" class="image"
+                  ><img src="../images/geekweather.jpeg" alt=""
+                /></a>
+                <h2>GeekWeather</h2>
+
+                <p>
+                  A simple weather app with an aesthetically user interface.
+                </p>
+              </article>
+              <article>
+                <a href="#" class="image"
+                  ><img src="../images/filestorks.jpeg" alt=""
+                /></a>
+                <h2>FileStorks.com</h2>
+
+                <p>
+                  A quick and easy way to share files.
+                </p>
+              </article>
+            </div>
+          </section>
+
+          <!-- Section -->
+          <section>
+            <header class="major">
+              <h2>Connect with me!</h2>
+            </header>
+            <p>
+              Open to collaboration opportunities, topic suggestions, or any
+              questions!
+            </p>
+            <ul class="contact">
+              <li class="fa-envelope">
+                <a href="#">garciacy at bycyril dot com</a>
+              </li>
+              <li class="fa-twitter">
+                <a href="https://twitter.com/cyrilivargarcia"
+                  >@cyrilivargarcia</a
+                >
+              </li>
+              <li class="fa-linkedin">
+                <a href="https://www.linkedin.com/in/cyrilivargarcia/"
+                  >in/cyrilivargarcia</a
+                >
+              </li>
+            </ul>
+          </section>
+
+          <!-- Footer -->
+          <footer id="footer">
+            <p class="copyright">
+              &copy; Website developed by <br />AJ aj@lkn.io | @ajlkn
+              <br />
+              <a href="https://html5up.net">HTML5 UP</a>.
+            </p>
+          </footer>
+        </div>
+      </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="../assets/js/jquery.min.js"></script>
+    <script src="../assets/js/browser.min.js"></script>
+    <script src="../assets/js/breakpoints.min.js"></script>
+    <script src="../assets/js/util.js"></script>
+    <script src="../assets/js/main.js"></script>
+  </body>
+</html>
