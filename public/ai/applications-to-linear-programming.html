@@ -6,15 +6,13 @@
 -->
 <html>
   <head>
-    <title>
-      Artificial Intelligence
-    </title>
+    <title>Applications to Linear Programming in Artificial Intelligence</title>
     <meta charset="utf-8" />
     <meta
       name="viewport"
       content="width=device-width, initial-scale=1, user-scalable=no"
     />
-    <link rel="stylesheet" href="assets/css/main.css" />
+    <link rel="stylesheet" href="../assets/css/main.css" />
   </head>
   <body class="is-preload">
     <!-- Wrapper -->
@@ -56,41 +54,79 @@
             </ul>
           </header>
 
-          <!-- Section -->
+          <!-- Content -->
           <section>
-            <header class="major">
-              <h2>Artificial Intelligence</h2>
+            <header class="main">
+              <h1>
+                Applications to Linear Programming in Artificial Intelligence
+              </h1>
             </header>
-            <div class="posts">
-              <article>
-                <a
-                  href="ai/applications-to-linear-programming.html"
-                  class="image"
-                  ><img
-                    src="https://futureoflife.org/wp-content/uploads/2015/11/artificial_intelligence_benefits_risk.jpg"
-                    alt=""
-                /></a>
-                <h3>
-                  Applications to Linear Programming in Artificial Intelligence
-                </h3>
-                <p>Published: 03/15/19</p>
-                <p>
-                  I believe artificial intelligence is more of a topic for
-                  mathematics than computer science for its heavy reliance in
-                  mathematics. Here I explain why.
-                </p>
 
-                <ul class="actions">
-                  <li>
-                    <a
-                      href="ai/applications-to-linear-programming.html"
-                      class="button"
-                      >Read</a
-                    >
-                  </li>
-                </ul>
-              </article>
-            </div>
+            <span class="image main"
+              ><img
+                src="https://futureoflife.org/wp-content/uploads/2015/11/artificial_intelligence_benefits_risk.jpg"
+                alt=""
+            /></span>
+            <h2>Introduction</h2>
+            <p>
+              According to Wikipedia, artificial intelligence is a subject in
+              computer science where intelligence is demonstrated by computers.
+              In my opinion, I believe artificial intelligence is more of a
+              topic for mathematics than computer science for its heavy reliance
+              in mathematics. Take an artificial neural network as an example.
+              An artificial neural network is a network of interconnected nodes
+              that replicate the behavior of the human brain. Since computers
+              don't have a brain that is as complex as the human brain, we
+              barrow topics from mathematics to help us represent this type of
+              behavior in computers.
+            </p>
+            <p>
+              Linear programming is the heart of an artificial neural network. A
+              linear program consists of a real valued linear function of
+              <code>n</code> independent real variables with a system of
+              finitely many linear equations and linear inequalities. In an
+              artificial neural network, we can barrow that same theory by
+              representing it in a form of a matrix equation.
+            </p>
+
+            <p>
+              A linear matrix equation is followed by the model
+              <code>Ax = b</code> where our constant matrix or our input is
+              denoted as <code>A</code>, our weights is denoted as
+              <code>x</code> and our output is denoted as <code>b</code>
+            </p>
+
+            <p>
+              There are four steps to a neural network
+              <br />
+              • Get the dot product of our inputs and random weights
+              <br />
+              • Feed the sum through an activation function
+              <br />
+              • Calculate the error from the known outputs
+              <br />
+              • Update the weights from the calculated error
+            </p>
+            <p>
+              We repeat this same process <code>n</code> number of times. Too
+              high, we run the risk of over-fitting, too low we would not get
+              the optimal weights.
+            </p>
+            <p>
+              The activation function is selected based on the desired output.
+              If we want an output that is between 0 and 1, we use the
+              <code>sigmoid function</code> also known as the
+              <code>softmax function</code>. An output between -1 to 1, we use
+              the <code>tanh function</code> . An output of 0 to infinity, we
+              use the <code>ReLU function</code>
+            </p>
+            <p>
+              There are many forms of neural networks. The one described above
+              is known as a feed forward neural network because data is passed
+              through in one direction. This model can easily be used for any
+              linear programming problem from linear regression to logistic
+              regression.
+            </p>
           </section>
         </div>
       </div>
@@ -104,19 +140,19 @@
               <h2>Menu</h2>
             </header>
             <ul>
-              <li><a href="index.html">Home</a></li>
-              <li><a href="ios-engineering.html">iOS Engineering</a></li>
+              <li><a href="../index.html">Home</a></li>
+              <li><a href="../ios-engineering.html">iOS Engineering</a></li>
               <li>
-                <a href="artificial-intelligence.html"
+                <a href="../artificial-intelligence.html"
                   >Artificial Intelligence</a
                 >
               </li>
               <li>
-                <a href="statistics-and-data-science.html"
+                <a href="../statistics-and-data-science.html"
                   >Statistics and Data Science</a
                 >
               </li>
-              <li><a href="blog.html">Blog</a></li>
+              <li><a href="../blog.html">Blog</a></li>
             </ul>
           </nav>
 
@@ -128,7 +164,7 @@
             <div class="mini-posts">
               <article>
                 <a href="#" class="image"
-                  ><img src="images/memo.jpeg" alt=""
+                  ><img src="../images/memo.jpeg" alt=""
                 /></a>
                 <h2>Memo</h2>
                 <p>
@@ -137,7 +173,7 @@
               </article>
               <article>
                 <a href="#" class="image"
-                  ><img src="images/geekweather.jpeg" alt=""
+                  ><img src="../images/geekweather.jpeg" alt=""
                 /></a>
                 <h2>GeekWeather</h2>
 
@@ -147,7 +183,7 @@
               </article>
               <article>
                 <a href="#" class="image"
-                  ><img src="images/filestorks.jpeg" alt=""
+                  ><img src="../images/filestorks.jpeg" alt=""
                 /></a>
                 <h2>FileStorks.com</h2>
 
@@ -184,6 +220,7 @@
             </ul>
           </section>
 
+          <!-- Footer -->
           <!-- Footer -->
           <footer id="footer">
             <p class="copyright">
