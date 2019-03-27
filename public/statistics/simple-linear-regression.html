@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<!--
+	Editorial by HTML5 UP
+	html5up.net | @ajlkn
+	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+-->
+<html>
+  <head>
+    <title>Simple Linear Regression</title>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, user-scalable=no"
+    />
+    <link rel="stylesheet" href="../assets/css/main.css" />
+  </head>
+  <body class="is-preload">
+    <!-- Wrapper -->
+    <div id="wrapper">
+      <!-- Main -->
+      <div id="main">
+        <div class="inner">
+          <!-- Header -->
+          <header id="header">
+            <a href="#" class="logo"><strong>Articles</strong> by Cyril</a>
+            <ul class="icons">
+              <li>
+                <a
+                  href="https://twitter.com/cyrilivargarcia"
+                  class="icon fa-twitter"
+                  ><span class="label">Twitter</span></a
+                >
+              </li>
+              <li>
+                <a
+                  href="https://www.linkedin.com/in/cyrilivargarcia/"
+                  class="icon fa-linkedin"
+                  ><span class="label">LinkedIn</span></a
+                >
+              </li>
+              <li>
+                <a
+                  href="https://github.com/cyrilivargarcia"
+                  class="icon fa-github"
+                  ><span class="label">GitHub</span></a
+                >
+              </li>
+
+              <li>
+                <a href="https://bycyril.com/" class="icon fa-html5"
+                  ><span class="label">Web</span></a
+                >
+              </li>
+            </ul>
+          </header>
+
+          <!-- Content -->
+          <section>
+            <header class="main">
+              <h1>Simple Linear Regression</h1>
+            </header>
+
+            <span class="image main"
+              ><img
+                src="https://images.tutorvista.com/cms/images/113/scatter-plot111.png"
+                alt=""
+            /></span>
+            <h2>Introduction</h2>
+            <p>
+              Linear regression is applied to cases in which two variables are
+              related. The main idea is when you are given a set of data points,
+              your task is to find a line that best fit the data points. There
+              are many ways to solve this, and the most effective way of finding
+              the line of best fit is the least-squares method.
+            </p>
+
+            <hr class="major" />
+
+            <h2>Application</h2>
+            <p>
+              Some examples can be applied to finding the relationship between
+              the age and height of a child, high school GPA and college GPA of
+              students, describing the relationship between shoe size and hand
+              size.
+            </p>
+
+            <hr class="major" />
+
+            <h2>Simple Linear Regression</h2>
+            <p>
+              The simple linear regression is modeled as
+              <code>y = mx + b</code>. Our input or predictor is denoted as
+              <code>x</code>, <code>y</code> is our output or response,
+              <code>m</code> is our slope and <code>b</code> is our
+              <code>y intercept</code>
+            </p>
+
+            <p>
+              One of the many ways of finding the line of best fit is by
+              least-squares method. This formula can be modeled by the function
+              below:
+            </p>
+            <pre><code>
+def line_of_best_fit(x,y):
+xm = mean(x)
+ym = mean(y)
+
+a = 0
+b = 0
+
+for i in range(len(x)):
+  a += (x[i] - xm) * (y[i] * ym)
+  b += (x[i] - xm)**2
+
+m = a / b
+
+y = ym - (m * xm)
+
+return (m,y)
+            </code></pre>
+
+            <p>
+              This function would return the <code>slope</code> and the
+              <code>y intercept</code> respectively. Linear regression can help
+              us logically interpret the relationship of your data, predict the
+              output given some input, or find the probability of an output to
+              occur.
+            </p>
+
+            <hr class="major" />
+            <h2>Example</h2>
+            <p>As an example, let's look at the following linear model:</p>
+            <pre><code><b>y = 0.46x - 3.63</b></code></pre>
+            <p>
+              This model describes the relationship between the weight of the
+              brain and body of a mammal species in kilograms. In this formula,
+              <code>x</code> will represent the weight of the body and
+              <code>y</code> will represent the weight of the brain. From this
+              model, we can interpret that on average, the weight of the brain
+              will increase by 0.46% for every kilogram of the body. From this
+              same model, we can also predict the weight of the mammals brain by
+              the weight of the mammals body. From this model, we can also find
+              the probability for a mammal to have a brain that weighs some
+              value <code>y</code> if the mammals body weight is some value
+              <code>x</code>
+            </p>
+
+            <hr class="major" />
+            <h2>Residual variance</h2>
+            <p>
+              The residual variance describes the variability in the model. In
+              other words, it tells us how much of the observation is spread
+              from the line of best fit. A higher residual variance, the data is
+              much more spread while a smaller residual variance are closer to
+              the line of best fit.
+            </p>
+
+            <p>
+              To calculate the residual variance, we first have to calculate the
+              <code>error sum of squares</code>. The model is represented in
+              this function
+            </p>
+            <pre><code>
+sse = 0
+for i in range(len(data)):
+  y = data[i][0]
+  x = data[i][1]
+  
+  sse += (y -(m * x + b))**2
+
+# To estimate the residual variance:
+r = sse / (n - 2)	
+</code></pre>
+            <hr class="major" />
+            <h2>Coefficient of Determination</h2>
+            <p>
+              The coefficient of determination describes how much of the data
+              influences the line of best fit. We can calculate this by first
+              calculating the <code>total sums of squares</code> and the
+              <code>error sum of squares</code>.
+            </p>
+            <pre><code>
+sst = 0
+mean_of_y = mean(Y)
+
+for y in Y
+  sst +=(y - mean_of_y)**2
+
+# To calculate the coefficient of determination 
+r**2 = 1 - (sse / sst)
+</code></pre>
+            <p>
+              <b
+                >A coefficient of determination that is close to 1 means that
+                the points all lie close to the regression line.
+              </b>
+            </p>
+            <hr class="major" />
+            <h2>Conclusion</h2>
+            <p>
+              These are some of the few applications of linear regression. You
+              can try to practice finding the line of best fit using some of the
+              datasets from this website
+              <a
+                href="https://people.sc.fsu.edu/~jburkardt/datasets/regression/regression.html"
+                >here</a
+              >
+            </p>
+          </section>
+        </div>
+      </div>
+
+      <!-- Sidebar -->
+      <div id="sidebar">
+        <div class="inner">
+          <!-- Menu -->
+          <nav id="menu">
+            <header class="major">
+              <h2>Menu</h2>
+            </header>
+            <ul>
+              <li><a href="../index.html">Home</a></li>
+              <li><a href="../ios-engineering.html">iOS Engineering</a></li>
+              <li>
+                <a href="../artificial-intelligence.html"
+                  >Artificial Intelligence</a
+                >
+              </li>
+              <li>
+                <a href="../statistics-and-data-science.html"
+                  >Statistics and Data Science</a
+                >
+              </li>
+              <li><a href="../blog.html">Blog</a></li>
+            </ul>
+          </nav>
+
+          <!-- Section -->
+          <section>
+            <header class="major">
+              <h2>Projects by Cyril</h2>
+            </header>
+            <div class="mini-posts">
+              <article>
+                <a href="#" class="image"
+                  ><img src="../images/memo.jpeg" alt=""
+                /></a>
+                <h2>Memo</h2>
+                <p>
+                  Take and organize notes like text messages.
+                </p>
+              </article>
+              <article>
+                <a href="#" class="image"
+                  ><img src="../images/geekweather.jpeg" alt=""
+                /></a>
+                <h2>GeekWeather</h2>
+
+                <p>
+                  A simple weather app with an aesthetically user interface.
+                </p>
+              </article>
+              <article>
+                <a href="#" class="image"
+                  ><img src="../images/filestorks.jpeg" alt=""
+                /></a>
+                <h2>FileStorks.com</h2>
+
+                <p>
+                  A quick and easy way to share files.
+                </p>
+              </article>
+            </div>
+          </section>
+
+          <!-- Section -->
+          <section>
+            <header class="major">
+              <h2>Connect with me!</h2>
+            </header>
+            <p>
+              Open to collaboration opportunities, topic suggestions, or any
+              questions!
+            </p>
+            <ul class="contact">
+              <li class="fa-envelope">
+                <a href="#">garciacy at bycyril dot com</a>
+              </li>
+              <li class="fa-twitter">
+                <a href="https://twitter.com/cyrilivargarcia"
+                  >@cyrilivargarcia</a
+                >
+              </li>
+              <li class="fa-linkedin">
+                <a href="https://www.linkedin.com/in/cyrilivargarcia/"
+                  >in/cyrilivargarcia</a
+                >
+              </li>
+            </ul>
+          </section>
+
+          <!-- Footer -->
+          <!-- Footer -->
+          <footer id="footer">
+            <p class="copyright">
+              &copy; Website developed by <br />AJ aj@lkn.io | @ajlkn
+              <br />
+              <a href="https://html5up.net">HTML5 UP</a>.
+            </p>
+          </footer>
+        </div>
+      </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="../assets/js/jquery.min.js"></script>
+    <script src="../assets/js/browser.min.js"></script>
+    <script src="../assets/js/breakpoints.min.js"></script>
+    <script src="../assets/js/util.js"></script>
+    <script src="../assets/js/main.js"></script>
+  </body>
+</html>

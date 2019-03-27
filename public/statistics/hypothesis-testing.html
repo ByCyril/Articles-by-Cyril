@@ -6,15 +6,13 @@
 -->
 <html>
   <head>
-    <title>
-      Statistics and Data Science
-    </title>
+    <title>Hypothesis Testing</title>
     <meta charset="utf-8" />
     <meta
       name="viewport"
       content="width=device-width, initial-scale=1, user-scalable=no"
     />
-    <link rel="stylesheet" href="assets/css/main.css" />
+    <link rel="stylesheet" href="../assets/css/main.css" />
   </head>
   <body class="is-preload">
     <!-- Wrapper -->
@@ -56,99 +54,98 @@
             </ul>
           </header>
 
-          <!-- Section -->
+          <!-- Content -->
           <section>
-            <header class="major">
-              <h2>Statistics and Data Science</h2>
+            <header class="main">
+              <h1>Hypothesis Testing</h1>
             </header>
-            <div class="posts">
-              <article>
-                <a href="statistics/simple-linear-regression.html" class="image"
-                  ><img
-                    src="https://images.tutorvista.com/cms/images/113/scatter-plot111.png"
-                    alt=""
-                /></a>
-                <h3>Simple Linear Regression</h3>
-                <p>Published: 03/20/19</p>
-                <p>
-                  Linear regression is applied to cases in which two variables
-                  are related. The main idea is when you are given a set of data
-                  points, your task is to find a line that best fit the data
-                  points. There are many ways to solve this, and the most
-                  effective way of finding the line of best fit is the
-                  least-squares method.
-                </p>
 
-                <ul class="actions">
-                  <li>
-                    <a
-                      href="statistics/simple-linear-regression.html"
-                      class="button"
-                      >Read</a
-                    >
-                  </li>
-                </ul>
-              </article>
-              <article>
-                <a href="statistics/hypothesis-testing.html" class="image"
-                  ><img
-                    src="https://static05.cminds.com/wp-content/uploads/magento-statistics.png"
-                    alt=""
-                /></a>
-                <h3>Hypothesis Testing</h3>
-                <p>Published: 03/16/19</p>
-                <p>
-                  A beginners approach to hypothesis teting and calculating test
-                  statistics the programmatic way.
-                </p>
+            <span class="image main"
+              ><img
+                src="https://static05.cminds.com/wp-content/uploads/magento-statistics.png"
+                alt=""
+            /></span>
+            <h2>Introduction</h2>
+            <p>
+              A statistical hypothesis is a claim about a population parameter
+              such as the mean or a proportion. There are two contradicting
+              statements; a null hypothesis denoted as Ho and the alternative
+              hypothesis denoted as Ha (not the same as alternative facts). The
+              null hypothesis is said to be the claim that is initially assumed
+              to be true while the alternative contradicts the null hypothesis.
+            </p>
 
-                <ul class="actions">
-                  <li>
-                    <a href="statistics/hypothesis-testing.html" class="button"
-                      >Read</a
-                    >
-                  </li>
-                </ul>
-              </article>
-              <article>
-                <a href="statistics/two-factor-anova.html" class="image"
-                  ><img src="images/img2.jpg" alt=""
-                /></a>
-                <h3>Two-Factor ANOVA Analysis - A Programmers Approach</h3>
-                <p>Published: 03/14/19</p>
-                <p>
-                  A programmatic approach to understanding the two-factor ANOVA
-                  analysis.
-                </p>
+            <hr class="major" />
 
-                <ul class="actions">
-                  <li>
-                    <a href="statistics/two-factor-anova.html" class="button"
-                      >Read</a
-                    >
-                  </li>
-                </ul>
-              </article>
-              <article>
-                <a href="statistics/single-factor-anova.html" class="image"
-                  ><img src="images/img1.jpg" alt=""
-                /></a>
-                <h3>Single-Factor ANOVA Analysis - A Programmers Approach</h3>
-                <p>Published: 03/11/19</p>
+            <h2>The Goal</h2>
+            <p>
+              The goal is to reject or fail to reject the null hypothesis. We
+              never test the alternative but rather we test the null hypothesis
+              and we want to see if we reject the null hypothesis or we fail to
+              reject the null hypothesis. Rejecting the null hypothesis would
+              mean we favor the alternative and to fail to reject the null
+              hypothesis would mean we keep the null hypothesis as the true
+              claim.
+            </p>
 
-                <p>
-                  A programmatic approach to understanding the single-factor
-                  ANOVA analysis.
-                </p>
-                <ul class="actions">
-                  <li>
-                    <a href="statistics/single-factor-anova.html" class="button"
-                      >Read</a
-                    >
-                  </li>
-                </ul>
-              </article>
-            </div>
+            <hr class="major" />
+
+            <h2>Testing Procedure</h2>
+            <p>
+              • The null hypothesis should always be phrased as an equality
+              while the alternative hypothesis can be phrased as an equality or
+              an inequality.<br /><br />
+              • A test statistic is calculated based on the sample data. There
+              are various forms that depend on what you are calculating and how
+              you are calculating it. If you are performing a one-way or two-way
+              ANOVA, your test statistic is known as the f test and if you are
+              calculating the probability of an event to occur using the Central
+              Limit Theorem, you would use the z-score.<br /><br />
+              • A rejection region is based on the test statistic in which is
+              when you decide whether to reject the null hypothesis.
+            </p>
+            <hr class="major" />
+            <h2>Hypothesis Testing with p-values</h2>
+            <p>
+              The p-value is the area under a standard normal bell curve. If the
+              p-value is smaller than the significance level (usually 0.05 if
+              not specified), then we reject the null hypothesis. Otherwise, we
+              fail to reject.
+            </p>
+
+            <hr class="major" />
+            <h2>Test Statistics</h2>
+            <h4>Tests for a Population Mean</h4>
+            <p>The test statistic for a population mean is as followed:</p>
+            <pre><code>
+let p_0 = average of sample size
+let p_1 = given mean
+
+let s = point estimate
+
+def test_statistic_population_mean(data, p_0)
+    s = 0
+    p_1 = sum(data) / len(data)
+    
+    for x in data:
+        s += (x - p_1)**0.5
+    s = (s / (len(data) - 1)**0.5
+    
+    return (p_1 - p_0) / (s / len(data)**0.5) 
+            </code></pre>
+            <p>
+              If your sample size is larger than or equal to 40, we will
+              reference the z-table. Otherwise, we will refer to our t-table;
+              with the caveat that you are assuming the population is normal. Of
+              course, you can always find the p-value using computer.
+            </p>
+
+            <h4>Tests for a Population Proportion</h4>
+            <pre><code>
+let n = sample size
+def test_statistic_population_proportion(p_0, p_1, n):
+    return (p_0 - p_1) / (((p_1 * (1 - p_1)) / n)**0.5)
+            </code></pre>
           </section>
         </div>
       </div>
@@ -162,19 +159,19 @@
               <h2>Menu</h2>
             </header>
             <ul>
-              <li><a href="index.html">Home</a></li>
-              <li><a href="ios-engineering.html">iOS Engineering</a></li>
+              <li><a href="../index.html">Home</a></li>
+              <li><a href="../ios-engineering.html">iOS Engineering</a></li>
               <li>
-                <a href="artificial-intelligence.html"
+                <a href="../artificial-intelligence.html"
                   >Artificial Intelligence</a
                 >
               </li>
               <li>
-                <a href="statistics-and-data-science.html"
+                <a href="../statistics-and-data-science.html"
                   >Statistics and Data Science</a
                 >
               </li>
-              <li><a href="blog.html">Blog</a></li>
+              <li><a href="../blog.html">Blog</a></li>
             </ul>
           </nav>
 
@@ -186,7 +183,7 @@
             <div class="mini-posts">
               <article>
                 <a href="#" class="image"
-                  ><img src="images/memo.jpeg" alt=""
+                  ><img src="../images/memo.jpeg" alt=""
                 /></a>
                 <h2>Memo</h2>
                 <p>
@@ -195,7 +192,7 @@
               </article>
               <article>
                 <a href="#" class="image"
-                  ><img src="images/geekweather.jpeg" alt=""
+                  ><img src="../images/geekweather.jpeg" alt=""
                 /></a>
                 <h2>GeekWeather</h2>
 
@@ -205,7 +202,7 @@
               </article>
               <article>
                 <a href="#" class="image"
-                  ><img src="images/filestorks.jpeg" alt=""
+                  ><img src="../images/filestorks.jpeg" alt=""
                 /></a>
                 <h2>FileStorks.com</h2>
 
@@ -242,6 +239,7 @@
             </ul>
           </section>
 
+          <!-- Footer -->
           <!-- Footer -->
           <footer id="footer">
             <p class="copyright">
