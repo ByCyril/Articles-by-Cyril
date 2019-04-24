@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<!--
+	Editorial by HTML5 UP
+	html5up.net | @ajlkn
+	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+-->
+<html>
+  <head>
+    <title>Vision with Core ML</title>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, user-scalable=no"
+    />
+    <link rel="stylesheet" href="../assets/css/main.css" />
+  </head>
+  <body class="is-preload">
+    <!-- Wrapper -->
+    <div id="wrapper">
+      <!-- Main -->
+      <div id="main">
+        <div class="inner">
+          <!-- Header -->
+          <header id="header">
+            <a href="#" class="logo"><strong>Articles</strong> by Cyril</a>
+            <ul class="icons">
+              <li>
+                <a
+                  href="https://twitter.com/cyrilivargarcia"
+                  class="icon fa-twitter"
+                  ><span class="label">Twitter</span></a
+                >
+              </li>
+              <li>
+                <a
+                  href="https://www.linkedin.com/in/cyrilivargarcia/"
+                  class="icon fa-linkedin"
+                  ><span class="label">LinkedIn</span></a
+                >
+              </li>
+              <li>
+                <a
+                  href="https://github.com/cyrilivargarcia"
+                  class="icon fa-github"
+                  ><span class="label">GitHub</span></a
+                >
+              </li>
+
+              <li>
+                <a href="https://bycyril.com/" class="icon fa-html5"
+                  ><span class="label">Web</span></a
+                >
+              </li>
+            </ul>
+          </header>
+
+          <!-- Content -->
+          <section>
+            <header class="main">
+              <h1>Vision with Core ML</h1>
+            </header>
+
+            <span class="image main"
+              ><img
+                src="https://cdn-images-1.medium.com/max/1600/1*OZNZMNqqJYqH-LpNFYKI3w.png"
+                alt=""
+            /></span>
+            <h2>Introduction</h2>
+            <p>
+              The Vision framework is a computer vision library for iOS. It is
+              developed to allow developers to apply computer vision to their
+              applications. Out of the box, you can perform face recognition,
+              landmark detection, text detection, barcode recognition, image
+              registration, and general feature tracking. With Core ML, you can
+              apply your own custom models for your specific use case.
+            </p>
+
+            <p>
+              In this example, I will demonstrate how you can apply your own
+              image classifier with the vision framework. However, before we
+              begin, you must have general knowledge of the iOS Development
+              stack and the Swift programming language. You can download
+              pre-made classifiers
+              <a href="https://github.com/likedan/Awesome-CoreML-Models">here</a
+              >. For this tutorial, I will be using the ResNet50 model.
+            </p>
+            <hr class="major" />
+
+            <h2>Setup the Model</h2>
+            <p>
+              After downloading a model of your choice, we need to create a
+              <code>VNCoreMLModel</code>
+            </p>
+            <pre><code>
+  var model: VNCoreMLModel?
+  
+  override func viewDidLoad() {
+    super.viewDidLoad()
+  
+    do {
+      model = try VNCoreMLModel(for: ResNet50().model)
+    } catch {
+      fatalError(error.localizedDescription)
+    }
+  
+  }
+              </code></pre>
+            <hr class="major" />
+
+            <h2>Classify Images</h2>
+            <p>
+              Now we want to classify some images. First, we need to convert our
+              images of type <code>UIImage</code> to a <code>CGImage</code> then
+              converting that to a <code>CVPixelBuffer</code>
+            </p>
+            <p>
+              To convert to a <code>CVPixelBuffer</code>, we need a special
+              method to do that. The function below will do that for us. Go
+              ahead and copy that to your code.
+            </p>
+            <pre><code>
+func pixelBuffer (forImage image: CGImage, with frameSize: CGSize) -> CVPixelBuffer? {
+
+  var pixelBuffer: CVPixelBuffer?
+  
+  let status = CVPixelBufferCreate(kCFAllocatorDefault, Int(frameSize.width), Int(frameSize.height), kCVPixelFormatType_32BGRA , nil, &pixelBuffer)
+  
+  if status != kCVReturnSuccess {
+      return nil
+  }
+  
+  CVPixelBufferLockBaseAddress(pixelBuffer!, CVPixelBufferLockFlags.init(rawValue: 0))
+ 
+  let data = CVPixelBufferGetBaseAddress(pixelBuffer!)
+  let rgbColorSpace = CGColorSpaceCreateDeviceRGB()
+  let bitmapInfo = CGBitmapInfo(rawValue: CGBitmapInfo.byteOrder32Little.rawValue | CGImageAlphaInfo.premultipliedFirst.rawValue)
+  let context = CGContext(data: data, 
+          width: Int(frameSize.width), 
+          height: Int(frameSize.height), 
+          bitsPerComponent: 8, 
+          bytesPerRow: CVPixelBufferGetBytesPerRow(pixelBuffer!), 
+          space: rgbColorSpace, 
+          bitmapInfo: bitmapInfo.rawValue)
+
+  context?.draw(image, in: CGRect(x: 0, y: 0, width: image.width, height: image.height))
+  
+  CVPixelBufferUnlockBaseAddress(pixelBuffer!, CVPixelBufferLockFlags(rawValue: 0))
+  
+  return pixelBuffer   
+}
+</code></pre>
+            <p>
+              Now that you have that, we can proceed witht the classification
+              function.
+            </p>
+            <pre><code>
+public func classify(image: UIImage) {
+
+    // Step 1: Convert to CGImage
+    guard let cgimage = image.cgImage else { return }  
+
+    // Step 2: Convert to CVPixelBuffer
+    guard let imagePixelBuffer = pixelBuffer(forImage: cgimage, with: CGSize(width: 416, height: 416)) else { return }
+
+}
+    </code></pre>
+            <p>
+              Next, we need to call the <code>VNCoreMLRequest</code> function
+              and pass in our custom <code>VNCoreMLModel</code>.
+            </p>
+            <pre><code>
+let visionRequest = VNCoreMLRequest(model: model) { (request, error) in
+
+}
+    </code></pre>
+            <p>
+              Notice the callback parameters <code>request</code> and
+              <code>error</code>. The <code>request</code> parameter contains
+              the results of the classified image. We want to take this and
+              convert it to an array of
+              <code>VNClassificationObservation</code>. From there, we can parse
+              the information we need to display.
+            </p>
+            <pre><code>
+let visionRequest = VNCoreMLRequest(model: model) { (request, error) in
+    guard let results = request.results as? [VNClassificationObservation] else { return }
+    guard let recentResults = results.first else { return }
+
+    let label = recentResults.identifier
+    let confidenceLevel = Double(recentResults.confidence)
+
+    print(label, confidenceLevel)
+
+}
+</code></pre>
+            <p>
+              Lastly, we want to call the <code>VNImageRequestHandler</code>. In
+              this function, we pass the <code>VNCoreMLRequest</code> and the
+              <code>imagePixelBuffer</code>
+            </p>
+            <pre><code>
+do {
+    try VNImageRequestHandler(cvPixelBuffer: imagePixelBuffer, options: [:]).perform([visionRequest])
+} catch {
+    fatalError(error.localizedDescription)
+}
+</code></pre>
+
+            <hr class="major" />
+
+            <h2>Conclusion</h2>
+            <p>
+              Your entire classification function should look something like
+              this.
+            </p>
+            <pre><code>
+public func classify(image: UIImage) {
+
+    guard let cgimage = image.cgImage else { return }  
+    guard let imagePixelBuffer = pixelBuffer(forImage: cgimage, with: CGSize(width: 416, height: 416)) else { return }
+
+    let visionRequest = VNCoreMLRequest(model: model) { (request, error) in
+
+        guard let results = request.results as? [VNClassificationObservation] else { return }
+        guard let recentResults = results.first else { return }
+
+        let label = recentResults.identifier
+        let confidenceLevel = Double(recentResults.confidence)
+
+        print(label, confidenceLevel)
+
+    }
+
+    do {
+        try VNImageRequestHandler(cvPixelBuffer: imagePixelBuffer, options: [:]).perform([visionRequest])
+    } catch {
+        fatalError(error.localizedDescription)
+    }
+}
+</code></pre>
+          </section>
+        </div>
+      </div>
+
+      <!-- Sidebar -->
+      <div id="sidebar">
+        <div class="inner">
+          <!-- Menu -->
+          <nav id="menu">
+            <header class="major">
+              <h2>Menu</h2>
+            </header>
+            <ul>
+              <li><a href="../index.html">Home</a></li>
+              <li><a href="../ios-engineering.html">iOS Engineering</a></li>
+              <li>
+                <a href="../artificial-intelligence.html"
+                  >Artificial Intelligence</a
+                >
+              </li>
+              <li>
+                <a href="../statistics-and-data-science.html"
+                  >Statistics and Data Science</a
+                >
+              </li>
+              <li><a href="../blog.html">Blog</a></li>
+            </ul>
+          </nav>
+
+          <!-- Section -->
+          <section>
+            <header class="major">
+              <h2>Projects by Cyril</h2>
+            </header>
+            <div class="mini-posts">
+              <article>
+                <a href="#" class="image"
+                  ><img src="../images/memo.jpeg" alt=""
+                /></a>
+                <h2>Memo</h2>
+                <p>
+                  Take and organize notes like text messages.
+                </p>
+              </article>
+              <article>
+                <a href="#" class="image"
+                  ><img src="../images/geekweather.jpeg" alt=""
+                /></a>
+                <h2>GeekWeather</h2>
+
+                <p>
+                  A simple weather app with an aesthetically user interface.
+                </p>
+              </article>
+              <article>
+                <a href="#" class="image"
+                  ><img src="../images/filestorks.jpeg" alt=""
+                /></a>
+                <h2>FileStorks.com</h2>
+
+                <p>
+                  A quick and easy way to share files.
+                </p>
+              </article>
+            </div>
+          </section>
+
+          <!-- Section -->
+          <section>
+            <header class="major">
+              <h2>Connect with me!</h2>
+            </header>
+            <p>
+              Open to collaboration opportunities, topic suggestions, or any
+              questions!
+            </p>
+            <ul class="contact">
+              <li class="fa-envelope">
+                <a href="#">garciacy at bycyril dot com</a>
+              </li>
+              <li class="fa-twitter">
+                <a href="https://twitter.com/cyrilivargarcia"
+                  >@cyrilivargarcia</a
+                >
+              </li>
+              <li class="fa-linkedin">
+                <a href="https://www.linkedin.com/in/cyrilivargarcia/"
+                  >in/cyrilivargarcia</a
+                >
+              </li>
+            </ul>
+          </section>
+
+          <!-- Footer -->
+          <!-- Footer -->
+          <footer id="footer">
+            <p class="copyright">
+              &copy; Website developed by <br />AJ aj@lkn.io | @ajlkn
+              <br />
+              <a href="https://html5up.net">HTML5 UP</a>.
+            </p>
+          </footer>
+        </div>
+      </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="../assets/js/jquery.min.js"></script>
+    <script src="../assets/js/browser.min.js"></script>
+    <script src="../assets/js/breakpoints.min.js"></script>
+    <script src="../assets/js/util.js"></script>
+    <script src="../assets/js/main.js"></script>
+  </body>
+</html>
