@@ -13,29 +13,12 @@ function getDocumentTitle() {
   return document.title;
 }
 
-function timestamp() {
-  var date = new Date();
-  var hour = date.getHours();
-  var min = date.getMinutes();
-  var day = date.getDate();
-  var month = date.getMonth() + 1;
-  var year = date.getFullYear();
-  var timestamp;
-
-  if (hour > 12) {
-    hour = hour - 12;
-    timestamp = month + "/" + day + "/" + year + " " + hour + ":" + min + "PM";
-  } else {
-    timestamp = month + "/" + day + "/" + year + " " + hour + ":" + min + "AM";
-  }
-
-  return timestamp;
-}
-
 function updateVisitCount(title, count) {
+  let date = Math.round(new Date().getTime() / 1000);
+  console.log("date", date);
   database.ref(title).set({
     visits: count,
-    lastVisit: timestamp()
+    lastVisit: date
   });
   this.displayStats(count);
 }
