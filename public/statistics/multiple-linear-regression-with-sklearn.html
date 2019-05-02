@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<!--
+	Editorial by HTML5 UP
+	html5up.net | @ajlkn
+	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+-->
+<html>
+  <head>
+    <title>Multiple Linear Regression with SKLearn</title>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, user-scalable=no"
+    />
+    <link rel="stylesheet" href="../assets/css/main.css" />
+    <link rel="shortcut icon" href="../images/boy.png" />
+
+    <meta name="twitter:card" content="summary" />
+
+    <meta name="twitter:creator" content="@cyrilivargarcia" />
+    <meta
+      property="og:url"
+      content="https://articlesbycyril.com/statistics/multiple-linear-regression-with-sklearn.html"
+    />
+    <meta
+      property="og:title"
+      content="Multiple Linear Regression with SKLearn"
+    />
+    <meta
+      property="og:description"
+      content="Multiple Linear Regression is just like Simple Linear Regression but with more than one predictor."
+    />
+    <meta
+      property="og:image"
+      content="https://articlesbycyril.com/images/boy.png"
+    />
+  </head>
+  <body class="is-preload">
+    <!-- Wrapper -->
+    <div id="wrapper">
+      <!-- Main -->
+      <div id="main">
+        <div class="inner">
+          <!-- Header -->
+          <header id="header">
+            <a href="#" class="logo"><strong>Articles</strong> by Cyril</a>
+            <ul class="icons">
+              <li>
+                <a
+                  href="https://twitter.com/cyrilivargarcia"
+                  class="icon fa-twitter"
+                  ><span class="label">Twitter</span></a
+                >
+              </li>
+              <li>
+                <a
+                  href="https://www.linkedin.com/in/cyrilivargarcia/"
+                  class="icon fa-linkedin"
+                  ><span class="label">LinkedIn</span></a
+                >
+              </li>
+              <li>
+                <a
+                  href="https://github.com/cyrilivargarcia"
+                  class="icon fa-github"
+                  ><span class="label">GitHub</span></a
+                >
+              </li>
+
+              <li>
+                <a href="https://bycyril.com/" class="icon fa-html5"
+                  ><span class="label">Web</span></a
+                >
+              </li>
+            </ul>
+          </header>
+
+          <!-- Content -->
+          <section>
+            <header class="main">
+              <h1>Multiple Linear Regression with SKLearn</h1>
+            </header>
+
+            <span class="image main"
+              ><img
+                src="https://images.pexels.com/photos/955447/pexels-photo-955447.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260"
+                alt=""
+            /></span>
+            <section>
+              <h3 align="right" id="stats"></h3>
+            </section>
+            <h2>Introduction</h2>
+            <p>
+              Multiple Linear Regression Analysis is just like Simple Linear
+              Regression but with one or more predictors. For example, high
+              school GPA of a college student may be used to predict the
+              students success in college. However, we know that there are other
+              factors that can better predict students college success. Multiple
+              linear regression allows us to make such predictions.
+            </p>
+            <p>
+              The general additive multiple regression model equation is
+              described as followed:
+            </p>
+            <pre><code>y = Bo + B1x1 + B2x2 + ... + BnXn + error</code></pre>
+            <p>Where the standard error is denoted as epsilon</p>
+
+            <hr class="major" />
+
+            <h2>Parameter Estimation</h2>
+            <p>
+              In multiple linear regression, parameter estimates are determined
+              by the principle of least squares.
+            </p>
+            <p>
+              <strong>Sum of Squared Error:</strong>
+              <code>SSE += (y[i] - y_hat)**2</code> where <code>y[i]</code> is
+              the observed value while <code>y_hat</code> is the predicted
+              value.
+            </p>
+            <p>
+              <strong>Sum of Squared Regression:</strong>
+              <code>SSR += (y_hat - mean_y)**2</code> where
+              <code>y_hat</code> is the predicted value and
+              <code>mean_y</code> is the mean of the observations.
+            </p>
+            <p>
+              <strong>Sum of Squared Totals:</strong>
+              <code>SST += (y[i] - mean_y)**2</code> where <code>y[i]</code> is
+              the observed value and the <code>mean_y</code> is the mean of the
+              observed values.
+            </p>
+            <p>
+              <strong>Mean Squared Regression:</strong>
+              <code>MSR = SSR / k</code> where k is the number of predictors
+            </p>
+            <p>
+              <strong>Mean Squared Error:</strong>
+              <code>MSE = SSE / (n - (k + 1))</code> where <code>k</code> is the
+              number of predictors and <code>n</code> is the number of
+              observations.
+            </p>
+            <p>
+              <strong>Coefficient of Determination: </strong
+              ><code>1 - (sse / sst)</code>. The coefficient of determination
+              describes how much of the data influences the line of best fit. A
+              number that is close to 1 means that the points all lie close to
+              the regression line.
+            </p>
+
+            <hr class="major" />
+
+            <h2>Global F-Test</h2>
+            <p>
+              Before we proceed to interpret the model, we first have to perform
+              the Global F-test; to help us verify that the output would indeed
+              depend on at least one of the variables. The significance of the
+              global f-test has the following hypothesis:
+            </p>
+            <pre><code>Ho : B1 = B2 = ... = Bk = 0
+Ha : At least one of Bj != 0
+</code></pre>
+            <p>
+              <strong>Test Statistic</strong> or <strong>F-test:</strong> for a
+              multiple linear regresion is as followed:
+              <code>F = MSR / MSE</code> where the degrees of freedom is
+              <code>k</code> and <code>n - (k + 1)</code>. If the F value is
+              larger than the significance level (usually 0.05 if not
+              specified), we reject the null hypothesis; meaning that the
+              response is dependent on at least one of the predictors. Therefor,
+              we can proceed to interpret the multiple regresion model.
+            </p>
+            <hr class="major" />
+            <h2>Categorical Interval</h2>
+            <p>
+              There can be instances in which one of the variables in a multiple
+              linear regression model will be categorical. Ideally we would
+              break up the <code>n</code> categories into <code>n</code> dummy
+              variables. For example, suppose we are trying to predict the
+              success of a college student based on GPA and major (Economics,
+              Math, and Computer Science). GPA will be denoted as
+              <code>x1</code> and a student majoring in Economics, Math, and
+              Computer Science will be denoted as
+              <code>x2, x3, and x4</code> respectively.
+            </p>
+            <pre><code>x2 = 1 if major is economics 
+x2 = 0 otherwise
+
+x3 = 1 if major is math 
+x3 = 0 otherwise 
+
+x4 = 1 if major is computer science 
+x4 = 0 otherwise
+</code></pre>
+            <p>
+              Our model would look something like this
+              <code>y = B0 + B1x1 + B2x2 + B3x3 + B4x4</code>
+            </p>
+            <hr class="model" />
+            <h2>SKLearn</h2>
+            <p>
+              SKLearn is a machine learning library for Python and R. It's known
+              for its friendliness to beginners without the compromise for
+              efficiency and accuracy.
+            </p>
+            <h4>Installation</h4>
+            <p>
+              Before we begin, make sure you have SKLearn installed in your
+              machine. You can learn how to install SKLearn
+              <a href="https://scikit-learn.org/stable/install.html">here</a>
+            </p>
+            <p>
+              You will also need to install Python in your device. You can learn
+              how to install Python
+              <a href="https://realpython.com/installing-python/">here</a>
+            </p>
+            <p>
+              Lastly, you'll need a good text editor or IDE. I personally use
+              Jupyter Notebooks or Sublime Text 3; but you are free to use
+              whatever works for you. If you want to tryout Jupyter notebooks,
+              the installation guide is
+              <a href="https://jupyter.readthedocs.io/en/latest/install.html">
+                here</a
+              >
+              or Sublime Text 3 is
+              <a href="https://www.sublimetext.com/3">here</a>
+            </p>
+            <hr class="major" />
+            <h2>Problem</h2>
+            <p>
+              For a sample of <code>n = 20</code> individuals, we have
+              measurements of <code>y = body fat</code>,
+              <code>x1 = triceps skinfold thickness</code>,
+              <code>x2 = thigh circumference</code>, and
+              <code>x3 = midarm circumference</code>.
+            </p>
+            <h4>Step 0)</h4>
+            <p>First we import our python libraries</p>
+            <pre><code>from sklearn.linear_model import LinearRegression   
+import numpy as np</code></pre>
+            <h4>Step 1)</h4>
+            <p>
+              The data will be using is listed below. Feel free to copy the data
+              or download the textfile <a href="bodyfat.txt">here</a>. Each row
+              in <code>X</code> is an independent observation (predictors)
+              ordered by
+              <code
+                >[triceps skinfold thickness, thigh circumference, midarm
+                circumference]</code
+              >
+              and <code>y</code> is our body fat (response).
+            </p>
+            <pre><code>X = np.array([[19.5, 43.1, 29.1],
+                    [24.7, 49.8, 28.2],
+                    [30.7, 51.9, 37.0],
+                    [29.8, 54.3, 31.1],
+                    [19.1, 42.2, 30.9],
+                    [25.6, 53.9, 23.7],
+                    [31.4, 58.5, 27.6],
+                    [27.9, 52.1, 30.6],
+                    [22.1, 49.9, 23.2],
+                    [25.5, 53.5, 24.8],
+                    [31.1, 56.6, 30.0],
+                    [30.4, 56.7, 28.3],
+                    [18.7, 46.5, 23.0],
+                    [19.7, 44.2, 28.6],
+                    [14.6, 42.7, 21.3],
+                    [29.5, 54.4, 30.1],
+                    [27.7, 55.3, 25.7],
+                    [30.2, 58.6, 24.6],
+                    [22.7, 48.2, 27.1],
+                    [25.2, 51.0, 27.5]])
+y = np.array([[11.9,22.8,18.7,20.1,12.9,21.7,27.1,25.4,21.3,19.3,25.4,27.2,11.7,17.8,12.8,23.9,22.6,25.4,14.8,21.1]]).T</code></pre>
+            <h4>Step 2)</h4>
+            <p>
+              Using SKLearn, we want to use the
+              <code>LinearRegression()</code> function and fit the model.
+            </p>
+            <pre><code>regression_model = LinearRegression().fit(X,y)</code></pre>
+            <h4>Step 3)</h4>
+            <p>
+              From our <code>regression_model</code>, we can print out our
+              intercepts and coefficients to complete our multiple linear
+              regression model.
+            </p>
+            <pre><code>B0 = regression_model.intercept_
+B = regression_model.coef_
+print(B0, B)</code></pre>
+            <p>
+              After running your code, your intercept and coefficients should
+              look something like this
+            </p>
+            <h5>Output</h5>
+            <pre><code>[117.08469478] [[ 4.33409201 -2.85684794 -2.18606025]]</code></pre>
+            <p>
+              We can also use the <code>predict()</code> function to predict the
+              individuals body fat by inputing values for triceps skinfold
+              thickness, thigh circumference, midarm circumference.
+            </p>
+            <pre><code>prediction = reg.predict([[19.5, 43.1, 29.1]])
+print(prediction)</code></pre>
+            <h5>Output</h5>
+            <pre><code>[[20.21884106]]</code></pre>
+            <h4>Step 4)</h4>
+            <p>
+              Before we interpret the model, lets perform the Global F-test to
+              verify that predicting the body fat would indeed depend on at
+              least one of the predictors. Recall the
+              <strong>Parameter Estimations</strong> above. We need to calculate
+              the sum of squares before calculating the f value. Create a
+              function that will calculate the sum of squares.
+            </p>
+            <pre><code>def get_sum_of_squares():
+    ssr = 0
+    sse = 0
+    sst = 0
+
+    mean_y = np.mean(y)
+
+    for i in range(20):
+        y_hat = regression_model.predict([X[i]])
+
+        ssr += (y_hat - mean_y)**2
+        sse += (y[i][0] - y_hat)**2
+        sst += (y[i][0] - mean_y)**2
+
+    return (ssr, sse, sst)
+
+sum_of_squares = get_sum_of_squares()</code></pre>
+            <p>
+              If you want to check your function to see if you get the right
+              numbers, this is my output.
+            </p>
+            <h5>Output</h5>
+            <pre><code>ssr = 396.98461183, sse = 98.40488817, sst = 495.3894999999999 # Don't worry about format</code></pre>
+            <h4>Step 5)</h4>
+            <p>Create a function to calculate the global F-test</p>
+            <pre><code>def global_f_test():
+    n = len(yy)
+    k = 3
+    ssr = ss[0]
+    sse = ss[1]
+
+    msr = ssr / k
+    mse = sse / (n - (k + 1))
+
+    return msr / mse</code></pre>
+            <p>
+              Your global F-test should be: <code>[[21.5157123]]</code> which is
+              significantly higher than the significant value (it was not
+              specified so by default, our significant value is 0.05). Therefor,
+              we can proceed to interpret the model.
+            </p>
+            <h4>Step 6)</h4>
+            <p>
+              From <b>Step 3, </b>we know the y-intercept is
+              <code>117.08469478</code> and our <code>b1</code>,<code>b2</code>,
+              and <code>b3</code> are <code>4.33409201</code>,
+              <code>-2.85684794</code>, and
+              <code>-2.18606025</code> respectively. Our fitted model would look
+              like this:
+            </p>
+            <pre><code>y = 4.33409201(x1) + -2.85684794(x2) + -2.18606025(x3) + 117.08469478</code></pre>
+            <p>
+              Here we can interpret that <br />• For every unit increase of the
+              thickness of an individuals triceps, we expect an increase in body
+              fat by 4.33%<br />• For every unit increase of the thickness of an
+              individuals thighs, we expect a decrease in body fat by -2.85%
+              <br />• For every unit increase of the thickness of an individuals
+              midarm, we expect a decrease in body fat by -2.19%
+            </p>
+            <h4>Optional Step 7)</h4>
+            <p>
+              Just for practice, we can calculate the coefficient of
+              determination. Recall the coefficient of determination formula
+              under <b>Parameter Estimation</b>.
+            </p>
+            <pre><code>def coefficient_of_determination():
+    sse = ss[1]
+    sst = ss[2]
+    return 1 - (sse / sst)</code></pre>
+            <h5>Output</h5>
+            <pre><code>coefficient of determination = [[0.80135855]]</code></pre>
+            <p>
+              The value is close to 1, therefor we can say that most of the
+              points lie close to the regression line.
+            </p>
+            <hr class="major" />
+            <h2>References</h2>
+            <p>
+              <a
+                href="https://365datascience.com/sum-squares/#wp-video-lightbox/2/"
+                >Sum of Squares Formula</a
+              >
+              from 365datascience.com
+            </p>
+            <p>
+              <a
+                href="http://facweb.cs.depaul.edu/sjost/csc423/documents/f-test-reg.htm"
+                >F-test for Linear Regression</a
+              >
+              from DePaul University Steve D. Jost
+            </p>
+            <p>
+              <a
+                href="https://newonlinecourses.science.psu.edu/stat501/node/292/"
+                >Problem</a
+              >
+              from PennState
+            </p>
+          </section>
+        </div>
+      </div>
+
+      <!-- Sidebar -->
+      <div id="sidebar">
+        <div class="inner">
+          <!-- Menu -->
+          <nav id="menu">
+            <header class="major">
+              <h2>Menu</h2>
+            </header>
+            <ul>
+              <li><a href="../index.html">Home</a></li>
+              <li><a href="../ios-engineering.html">iOS Engineering</a></li>
+              <li>
+                <a href="../artificial-intelligence.html"
+                  >Artificial Intelligence</a
+                >
+              </li>
+              <li>
+                <a href="../statistics-and-data-science.html"
+                  >Statistics and Data Science</a
+                >
+              </li>
+              <li><a href="../blog.html">Blog</a></li>
+            </ul>
+          </nav>
+
+          <!-- Section -->
+          <section>
+            <header class="major">
+              <h2>Projects by Cyril</h2>
+            </header>
+            <div class="mini-posts">
+              <article>
+                <a href="#" class="image"
+                  ><img src="../images/memo.jpeg" alt=""
+                /></a>
+                <h2>Memo</h2>
+                <p>
+                  Take and organize notes like text messages.
+                </p>
+              </article>
+              <article>
+                <a href="#" class="image"
+                  ><img src="../images/geekweather.jpeg" alt=""
+                /></a>
+                <h2>GeekWeather</h2>
+
+                <p>
+                  A simple weather app with an aesthetically user interface.
+                </p>
+              </article>
+              <article>
+                <a href="#" class="image"
+                  ><img src="../images/filestorks.jpeg" alt=""
+                /></a>
+                <h2>FileStorks.com</h2>
+
+                <p>
+                  A quick and easy way to share files.
+                </p>
+              </article>
+            </div>
+          </section>
+
+          <!-- Section -->
+          <section>
+            <header class="major">
+              <h2>Connect with me!</h2>
+            </header>
+            <p>
+              Open to collaboration opportunities, topic suggestions, or any
+              questions!
+            </p>
+            <ul class="contact">
+              <li class="fa-envelope">
+                <a href="#">garciacy at bycyril dot com</a>
+              </li>
+              <li class="fa-twitter">
+                <a href="https://twitter.com/cyrilivargarcia"
+                  >@cyrilivargarcia</a
+                >
+              </li>
+              <li class="fa-linkedin">
+                <a href="https://www.linkedin.com/in/cyrilivargarcia/"
+                  >in/cyrilivargarcia</a
+                >
+              </li>
+            </ul>
+          </section>
+
+          <!-- Footer -->
+          <!-- Footer -->
+          <footer id="footer">
+            <p class="copyright">
+              &copy; Website developed by <br />AJ aj@lkn.io | @ajlkn
+              <br />
+              <a href="https://html5up.net">HTML5 UP</a>.
+            </p>
+          </footer>
+        </div>
+      </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="../assets/js/jquery.min.js"></script>
+    <script src="../assets/js/browser.min.js"></script>
+    <script src="../assets/js/breakpoints.min.js"></script>
+    <script src="../assets/js/util.js"></script>
+    <script src="../assets/js/main.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/4.5.0/firebase.js"></script>
+    <script src="../analytics/analytics.js"></script>
+  </body>
+</html>

@@ -12,7 +12,22 @@
       name="viewport"
       content="width=device-width, initial-scale=1, user-scalable=no"
     />
-    <link rel="stylesheet" href="assets/css/main.css" />
+    <link rel="stylesheet" href="../assets/css/main.css" />
+    <link rel="icon" href="../images/boy.png" />
+    <link rel="shortcut icon" href="../images/boy.png" />
+
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:creator" content="@cyrilivargarcia" />
+    <meta property="og:url" content="https://articlesbycyril.com/" />
+    <meta property="og:title" content="Articles by Cyril" />
+    <meta
+      property="og:description"
+      content="A place to document what I'm learning!"
+    />
+    <meta
+      property="og:image"
+      content="https://articlesbycyril.com/images/boy.png"
+    />
   </head>
   <body class="is-preload">
     <!-- Wrapper -->
@@ -67,21 +82,24 @@
                 <p>iOS Software Engineer</p>
               </header>
               <p>
-                A place to document what I am learning about subjects I'm
-                passionate about.
+                A place to document what I'm learning!
 
                 <br />
                 <br />
-                My name is Cyril Garcia, I am a Statistics Major at San Jose
-                State University and a Software Engineering Intern at Pandora
-                Media. I plan to take that degree to pursue a career in Software
+                My name is <code>Cyril</code> and I am a
+                <code>Statistics Major at San Jose State University</code> and
+                an
+                <code>iOS Software Engineering Intern at Pandora Media</code>. I
+                plan to take that degree to pursue a career in Software
                 Engineering that specializes in applied Artificial Intelligence
                 in Mobile Devices.
               </p>
               <p>
-                I like talking about anything related to iOS or Machine Learning
-                at tech conferences. If you are organizing a tech conference and
-                are looking for speakers, please feel free to reachout!
+                I like <code>talking</code> about anything related to
+                <code>iOS</code> or <code>Machine Learning</code> at
+                <code>tech conferences</code>. If you are organizing a tech
+                conference and are looking for speakers, please feel free to
+                reachout!
               </p>
               <ul class="actions">
                 <li>
@@ -100,6 +118,32 @@
               <h2>Recent Articles</h2>
             </header>
             <div class="posts">
+              <article>
+                <a
+                  href="statistics/multiple-linear-regression-with-sklearn.html"
+                  class="image"
+                  ><img
+                  src="https://images.pexels.com/photos/955447/pexels-photo-955447.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260""
+                  alt="" /></a
+                >
+                <h3>Multiple Linear Regression</h3>
+                <p>Published: 05/01/19</p>
+                <p>
+                  Multiple Linear Regression is just like Simple Linear
+                  Regression but with more than one predictor. Learn how to
+                  perform this type of regression using SKLearn!
+                </p>
+
+                <ul class="actions">
+                  <li>
+                    <a
+                      href="statistics/multiple-linear-regression-with-sklearn.html"
+                      class="button"
+                      >Read</a
+                    >
+                  </li>
+                </ul>
+              </article>
               <article>
                 <a href="ios-engineering/hello-closures.html" class="image"
                   ><img
@@ -367,5 +411,7 @@
     <script src="assets/js/breakpoints.min.js"></script>
     <script src="assets/js/util.js"></script>
     <script src="assets/js/main.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/4.5.0/firebase.js"></script>
+    <script src="/analytics/analytics.js"></script>
   </body>
 </html>
