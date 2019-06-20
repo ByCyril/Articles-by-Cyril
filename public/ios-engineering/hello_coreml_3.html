@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<!--
+	Editorial by HTML5 UP
+	html5up.net | @ajlkn
+	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+-->
+<html>
+  <head>
+    <title>Hello, Core ML 3</title>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, user-scalable=no"
+    />
+    <link rel="stylesheet" href="../assets/css/main.css" />
+    <link rel="shortcut icon" href="../images/boy.png" />
+
+    <meta name="twitter:card" content="summary" />
+
+    <meta name="twitter:creator" content="@cyrilivargarcia" />
+    <meta property="og:url" content="https://articlesbycyril.com/ios-engineering/hello_coreml_3.html" />
+    <meta property="og:title" content="Hello, Core ML 3" />
+    <meta property="og:description" content="On-device training was once a dream then a reality with Core ML 3. Learn how to generate an updatable Core ML model with CoreMLTools." />
+    <meta
+      property="og:image"
+      content="https://articlesbycyril.com/images/boy.png"
+    />
+  </head>
+  <body class="is-preload">
+    <!-- Wrapper -->
+    <div id="wrapper">
+      <!-- Main -->
+      <div id="main">
+        <div class="inner">
+          <!-- Header -->
+          <header id="header">
+            <a href="#" class="logo"><strong>Articles</strong> by Cyril</a>
+            <ul class="icons">
+              <li>
+                <a
+                  href="https://twitter.com/cyrilivargarcia"
+                  class="icon fa-twitter"
+                  ><span class="label">Twitter</span></a
+                >
+              </li>
+              <li>
+                <a
+                  href="https://www.linkedin.com/in/cyrilivargarcia/"
+                  class="icon fa-linkedin"
+                  ><span class="label">LinkedIn</span></a
+                >
+              </li>
+              <li>
+                <a
+                  href="https://github.com/cyrilivargarcia"
+                  class="icon fa-github"
+                  ><span class="label">GitHub</span></a
+                >
+              </li>
+
+              <li>
+                <a href="https://bycyril.com/" class="icon fa-html5"
+                  ><span class="label">Web</span></a
+                >
+              </li>
+            </ul>
+          </header>
+
+          <!-- Content -->
+          <section>
+            <header class="main">
+              <h1>Hello, Core ML 3</h1>
+            </header>
+
+            <span class="image main"><img src="../images/coreml3.png" alt=""/></span>
+            <section>
+              <h3 align="right" id="stats"></h3>
+            </section>
+            <h2>Introduction</h2>
+            <p>
+              Machine Learning has been subject to great hype within the tech
+              industry; sparking great interest amongst seasoned and aspiring
+              engineers alike. In spite of the large barriers to entry, high
+              lveel frameworks like Keras, SciKit-Learn, and IBM Watson help
+              democratize artificial intelligence to the masses. The
+              indtroduction of Core ML by Apple in 2017, allowed developers who
+              aren't necessarily experts in the area of machine learning to
+              apply such technologies into their apps.
+            </p>
+            <p>
+              However,
+              <b><i>Core ML is not a machine learning framework,</i></b> it is a
+              framework that allow developers to apply machine learning models
+              into their apps. While it has shown great promise for the future
+              of machine learning in mobile devoces, it lacked the ability to
+              improve overtime. In Apple’s annual world wide developer
+              conference in 2019 changed that with the introduction to Core ML
+              3.
+            </p>
+            <p>
+              Core ML 3 is probably the most underrated new releases in WWDC
+              2019; largely dwarfed by other features and frameworks released
+              like dark mode, iPadOS, and SwiftUI. Nonetheless, it still
+              deserves some attention for what it can bring to future apps. Core
+              ML 3 now gives developers the ability to generate updatable
+              machine learning models. In other words, on-device model training.
+              You can still use popular machine learning libraries like Keras
+              and Turi Create to generate these models. To create an updatable
+              Core ML Model, you will need CoreMLTools to do that for you.
+            </p>
+
+            <p>
+              There are 6 general steps to create an updatable <b>neural network
+                    model</b>. From an existing model, we:
+              <ul>
+                <li>Load the specs of the existing model
+                </li>
+                <li>Create a neural network builder with the loaded specs
+                </li>
+                <li>Specify the updatable layers of your neural network
+                </li>
+                <li>Set the loss layer, optimizers, and epochs for on-device training
+                </li>
+                <li>Then export to a new MLModel
+                </li>
+              </ul>
+            </p>
+
+            <hr class="major" />
+
+            <h2>Overview</h2>
+            <p>I will demonstrate how to apply these steps on an MNIST handwritten digit MLModel with CoreMLTools. This article will be broken up into 2 parts
+                <br>
+                <b>Part 1 - </b>Generating an updatable MLModel
+                <br>
+                <b>Part 2 - </b> Applying the updatable MLModel (coming soon)
+            </p>
+            <p>To follow, you must have the following python dependency and files prepared:
+                <ul>
+                    <li>Install CoreMLTools 3.0b1</li>
+                    <li>MNIST MLModel - Download <a href='https://github.com/ph1ps/MNIST-CoreML/raw/master/MNISTPrediction/MNIST.mlmodel' download>here</a></li>
+                    <li>You can get the full jupyter notebook <a href='https://github.com/cyrilivargarcia/Hello_CoreML_3'>here</a></li>
+                </ul>
+                </p>
+
+                <hr class="major" />
+                <h2>Generating an Updatable Model</h2>
+                <h4>Step 1 - Load the specs of existing MLModel</h4>
+                <pre><code>specs = coremltools.utils.load_spec('mnist_mlmodel_path')</code></pre>
+                <h4>Step 2 - Create a NeuralNetworkBuilder with the loaded specs</h4>
+                <pre><code>builder = coremltools.models.neural_network.NeuralNetworkBuilder(spec=specs)</code></pre>
+                <h4>Step 3 - Apply the specs for training inputs and outputs
+                    </h4>
+                    <p>By inspecting <code>nn_spec</code>, you'll see the properties of your neural network. We want to set the specs for training inputs and outputs the same as the specs of our original model for on-device training.</p>
+                <pre><code>nn_spec = builder.spec
+
+nn_spec.description.trainingInput.extend([nn_spec.description.input[0]])
+nn_spec.description.trainingInput[0].shortDescription = 'Example of handwritten digit'
+                        
+nn_spec.description.trainingInput.extend([nn_spec.description.output[0]])
+nn_spec.description.trainingInput[1].shortDescription = 'Associated true label of example image'</code></pre>
+<h4>Step 4 - Set the updatable layers</h4>
+<p>You can view your updatable layers with <code>inspect_updatable_layers()</code>. For this example, <code>dense_1</code> and <code>dense_2</code> are updatable layers.</p>
+<pre><code>builder.make_updatable(['dense_1', 'dense_2'])</code></pre>
+<h4>Step 5 - Set the loss function, optimizer, and number of epochs</h4>
+<p>For <code>MNIST</code> dataset, we can use the <code>categorical_cross_entropy</code> loss function.</p>
+<pre><code># Set the loss function 
+builder.set_categorical_cross_entropy_loss(name='loss_layer', input='prediction', target='trueDigit')
+
+# Optimizer
+from coremltools.models.neural_network import SgdParams as sgd
+builder.set_sgd_optimizer(sgd(lr=0.01, batch=32))
+
+# number of epochs
+builder.set_epochs(50)
+</code></pre>
+<h4>Step 6 - Export as a new Core ML Model</h4>
+<pre><code>from coremltools.models import MLModel
+updatable_mlmodel = MLModel(nn_spec)
+updatable_mlmodel.save('./UpdatableMNIST.mlmodel')</code></pre>
+
+
+<hr class="major" />
+
+<h2>Conclusion</h2>
+<p>If you open your new MLModel, you'll see two new sections <code>Update</code> and <code>Parameters</code>. The <code>Update</code> section describes the type of inputs and outputs needed to update the model. The <code>Parameters</code> describes the parameters in which the model will train on.</p>
+          </section>
+        </div>
+      </div>
+
+      <!-- Sidebar -->
+      <div id="sidebar">
+        <div class="inner">
+          <!-- Menu -->
+          <nav id="menu">
+            <header class="major">
+              <h2>Menu</h2>
+            </header>
+            <ul>
+              <li><a href="../index.html">Home</a></li>
+              <li><a href="../ios-engineering.html">iOS Engineering</a></li>
+              <li>
+                <a href="../artificial-intelligence.html"
+                  >Artificial Intelligence</a
+                >
+              </li>
+              <li>
+                <a href="../statistics-and-data-science.html"
+                  >Statistics and Data Science</a
+                >
+              </li>
+              <li><a href="../blog.html">Blog</a></li>
+            </ul>
+          </nav>
+
+          <!-- Section -->
+          <section>
+            <header class="major">
+              <h2>Projects by Cyril</h2>
+            </header>
+            <div class="mini-posts">
+              <article>
+                <a href="#" class="image"
+                  ><img src="../images/memo.jpeg" alt=""
+                /></a>
+                <h2>Memo</h2>
+                <p>
+                  Take and organize notes like text messages.
+                </p>
+              </article>
+              <article>
+                <a href="#" class="image"
+                  ><img src="../images/geekweather.jpeg" alt=""
+                /></a>
+                <h2>GeekWeather</h2>
+
+                <p>
+                  A simple weather app with an aesthetically user interface.
+                </p>
+              </article>
+              <article>
+                <a href="#" class="image"
+                  ><img src="../images/filestorks.jpeg" alt=""
+                /></a>
+                <h2>FileStorks.com</h2>
+
+                <p>
+                  A quick and easy way to share files.
+                </p>
+              </article>
+            </div>
+          </section>
+
+          <!-- Section -->
+          <section>
+            <header class="major">
+              <h2>Connect with me!</h2>
+            </header>
+            <p>
+              Open to collaboration opportunities, topic suggestions, or any
+              questions!
+            </p>
+            <ul class="contact">
+              <li class="fa-envelope">
+                <a href="#">garciacy at bycyril dot com</a>
+              </li>
+              <li class="fa-twitter">
+                <a href="https://twitter.com/cyrilivargarcia"
+                  >@cyrilivargarcia</a
+                >
+              </li>
+              <li class="fa-linkedin">
+                <a href="https://www.linkedin.com/in/cyrilivargarcia/"
+                  >in/cyrilivargarcia</a
+                >
+              </li>
+            </ul>
+          </section>
+
+          <!-- Footer -->
+          <!-- Footer -->
+          <footer id="footer">
+            <p class="copyright">
+              &copy; Website developed by <br />AJ aj@lkn.io | @ajlkn
+              <br />
+              <a href="https://html5up.net">HTML5 UP</a>.
+            </p>
+          </footer>
+        </div>
+      </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="../assets/js/jquery.min.js"></script>
+    <script src="../assets/js/browser.min.js"></script>
+    <script src="../assets/js/breakpoints.min.js"></script>
+    <script src="../assets/js/util.js"></script>
+    <script src="../assets/js/main.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/4.5.0/firebase.js"></script>
+    <script src="../analytics/analytics.js"></script>
+  </body>
+</html>
