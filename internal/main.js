@@ -66,21 +66,35 @@ function addReference() {
   //   prettier-ignore
   elementBody.append("<input class='element' id='reference-" + blockNum + "' placeholder='Reference'></textarea>");
 }
-
+var firstBody = "";
 function preview() {
   var content = "";
   thread = {};
+
   document.getElementById("previewbody").innerHTML = "";
   // prettier-ignore
   let elements = document.getElementById("elementbody").querySelectorAll("input, textarea");
-
+  console.log(elements.length);
   for (var i = 0; i < elements.length; i++) {
     var value = elements[i].value;
     let id = elements[i].id;
     let type = id.split("-")[0];
 
     if (i == 0) {
-      articleTitle = value;
+      articleTitle = "";
+
+      for (var x in value) {
+        let c = value.charAt(x);
+        if (c == " ") {
+          articleTitle += "-";
+        } else {
+          articleTitle += c;
+        }
+      }
+    }
+    console.log(i);
+    if (i == 1) {
+      firstBody = value;
     }
     if (type == "title") {
       content += createTitle(value, "some subtitle");
@@ -88,9 +102,12 @@ function preview() {
       content += "<p>" + value + "</p>";
     } else if (type == "code") {
       content += "<pre><code>" + value + "</code></pre>";
+    } else if (type == "header") {
+      content += "<h3>" + value + "</h3>";
     }
   }
-  let preview = createHomePagePreview(articleTitle, null, "some stuff");
+
+  let preview = createHomePagePreview(articleTitle, null, firstBody);
   var ts = Math.round(new Date().getTime() / 1000);
   thread = {
     content: content,
@@ -130,7 +147,7 @@ function post() {
 }
 
 function createFooter(articleId) {
-  return `<footer><ul class='actions'><li><a href='${articleId}' class='button large'>Continue Reading</a></li></ul></footer>`;
+  return `<footer><ul class='actions'><li><a href='view.html?${articleId}' class='button large'>Continue Reading</a></li></ul></footer>`;
 }
 
 function createHomePagePreview(title, image, body) {
@@ -138,7 +155,7 @@ function createHomePagePreview(title, image, body) {
   let articleTitle = createTitle(title, "some subtitle");
   let footer = createFooter(title) + "</article>";
 
-  preview = articleTitle + body + footer;
+  preview = articleTitle + "<p>" + body + "</p>" + footer;
 
   return preview;
 }
