@@ -26,3 +26,7 @@ function createBody(text) {
 function createHeader(type, text) {
   return `<${type}>${text}</${type}>`;
 }
+
+function createCode(text) {
+  return `<pre><code>${text}</code></pre>`;
+}
