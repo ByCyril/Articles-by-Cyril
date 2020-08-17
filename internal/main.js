@@ -2,7 +2,6 @@ var blockNum = -1;
 var elementBody = $("#elementbody");
 var previewBody = $("#previewbody");
 var thread = {};
-var articleTitle = "";
 
 var config = {
   apiKey: "AIzaSyCu5Lyblgz7TgaoKS-Vp4zUcuRYN4pJG64",
@@ -31,12 +30,6 @@ function authenticate() {
   });
 }
 
-function addTitle() {
-  blockNum += 1;
-  //   prettier-ignore
-  elementBody.append("<input class='element' id='title-" + blockNum + "' placeholder='Title'></input>");
-}
-
 function addHeader() {
   blockNum += 1;
   //   prettier-ignore
@@ -55,17 +48,6 @@ function addCode() {
   elementBody.append("<textarea class='element' id='code-" + blockNum + "' placeholder='Code'></textarea>");
 }
 
-function addQuote() {
-  blockNum += 1;
-  //   prettier-ignore
-  elementBody.append("<textarea class='element' id='quote-" + blockNum + "' placeholder='body'></textarea>");
-}
-
-function addReference() {
-  blockNum += 1;
-  //   prettier-ignore
-  elementBody.append("<input class='element' id='reference-" + blockNum + "' placeholder='Reference'></textarea>");
-}
 var firstBody = "";
 function preview() {
   var content = "";
@@ -80,25 +62,7 @@ function preview() {
     let id = elements[i].id;
     let type = id.split("-")[0];
 
-    if (i == 0) {
-      articleTitle = "";
-
-      for (var x in value) {
-        let c = value.charAt(x);
-        if (c == " ") {
-          articleTitle += "-";
-        } else {
-          articleTitle += c;
-        }
-      }
-    }
-    console.log(i);
-    if (i == 1) {
-      firstBody = value;
-    }
-    if (type == "title") {
-      content += createTitle(value, "some subtitle");
-    } else if (type == "body") {
+    if (type == "body") {
       content += "<p>" + value + "</p>";
     } else if (type == "code") {
       content += "<pre><code>" + value + "</code></pre>";
@@ -107,14 +71,20 @@ function preview() {
     }
   }
 
-  let preview = createHomePagePreview(articleTitle, null, firstBody);
+  var articleTitle = document.getElementById("title").value;
+  var subtitle = document.getElementById("subtitle").value;
+  var firstBody = document.getElementById("body-0").value;
+  let title = createTitle(articleTitle, subtitle);
+
+  let preview = createHomePagePreview(articleTitle, firstBody, subtitle);
   var ts = Math.round(new Date().getTime() / 1000);
+  content = title + content;
+
   thread = {
     content: content,
     title: articleTitle,
     preview: preview,
     timestamp: ts,
-    test: "hello",
   };
 }
 
@@ -142,7 +112,10 @@ function createTitle(title, subtitle) {
 function post() {
   preview();
   if (confirm("Confirm to Post!")) {
-    database.ref(articleTitle).set(thread);
+    var articleTitle = "";
+    var value = document.getElementById("title").value;
+
+    database.ref(dash(value)).set(thread);
   }
 }
 
@@ -150,16 +123,27 @@ function createFooter(articleId) {
   return `<footer><ul class='actions'><li><a href='view.html?${articleId}' class='button large'>Continue Reading</a></li></ul></footer>`;
 }
 
-function createHomePagePreview(title, image, body) {
+function createHomePagePreview(title, body, subtitle) {
   var preview = "<article class='post'>";
-  let articleTitle = createTitle(title, "some subtitle");
-  let footer = createFooter(title) + "</article>";
+  let articleTitle = createTitle(title, subtitle);
+  let footer = createFooter(dash(title)) + "</article>";
 
   preview = articleTitle + "<p>" + body + "</p>" + footer;
 
   return preview;
 }
 
-function addImage() {}
+function dash(value) {
+  var articleTitle = "";
+  for (var x in value) {
+    let c = value.charAt(x);
+    if (c == " ") {
+      articleTitle += "-";
+    } else {
+      articleTitle += c;
+    }
+  }
+  return articleTitle;
+}
 
 init();
