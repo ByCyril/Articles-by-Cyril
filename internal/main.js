@@ -3,16 +3,17 @@ var elementBody = $("#elementbody");
 var previewBody = $("#previewbody");
 var thread = {};
 
-var config = {
-  apiKey: "AIzaSyCu5Lyblgz7TgaoKS-Vp4zUcuRYN4pJG64",
-  authDomain: "ba-baam.firebaseapp.com",
-  databaseURL: "https://ba-baam.firebaseio.com",
-  projectId: "ba-baam",
-  storageBucket: "ba-baam.appspot.com",
-  messagingSenderId: "772210314286",
-  appId: "1:772210314286:web:277fa2eb174540088b63bf",
+var firebaseConfig = {
+  apiKey: "AIzaSyC7ppADXgTCbapJWJho57NZpukEfVUvha4",
+  authDomain: "articles-by-cyril.firebaseapp.com",
+  databaseURL: "https://articles-by-cyril.firebaseio.com",
+  projectId: "articles-by-cyril",
+  storageBucket: "articles-by-cyril.appspot.com",
+  messagingSenderId: "228302831585",
+  appId: "1:228302831585:web:f643e53f43a24cf5b75ca0",
 };
-firebase.initializeApp(config);
+// Initialize Firebase
+firebase.initializeApp(firebaseConfig);
 
 // Get a reference to the database service
 var database = firebase.database();
