@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Articles by Cyril</title>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, user-scalable=no"
+    />
+    <link rel="stylesheet" href="assets/css/main.css" />
+  </head>
+  <body class="is-preload">
+    <!-- Wrapper -->
+    <div id="wrapper">
+      <!-- Header -->
+      <header id="header">
+        <h1><a href="index.html">Articles by Cyril</a></h1>
+        <nav class="links">
+          <ul>
+            <li><a href="ios.html">iOS Development</a></li>
+            <li><a href="statistics.html">Statistics</a></li>
+          </ul>
+        </nav>
+        <nav class="main">
+          <ul>
+            <li class="menu">
+              <a class="fa-bars" href="#menu">Menu</a>
+            </li>
+          </ul>
+        </nav>
+      </header>
+      <section id="menu">
+        <section>
+          <ul class="links">
+            <li>
+              <a href="ios.html">
+                <h3>iOS Development</h3>
+                <p>Articles centered around iOS Engineering</p>
+              </a>
+            </li>
+            <li>
+              <a href="statistics.html">
+                <h3>Statistics</h3>
+                <p>Articles centered around Data Science and Statistics</p>
+              </a>
+            </li>
+          </ul>
+        </section>
+      </section>
+      <!-- Main -->
+      <div id="main"></div>
+
+      <section id="sidebar">
+        <!-- Intro -->
+        <section id="intro">
+          <a href="#" class="logo"><img src="images/logo.jpg" alt="" /></a>
+          <header>
+            <h2>Statistics</h2>
+          </header>
+        </section>
+
+        <!-- About -->
+        <section class="blurb">
+          <h2>About</h2>
+          <p>
+            Things I'm learning and worth sharing centered around Statistics
+          </p>
+        </section>
+
+        <!-- Footer -->
+        <section id="footer">
+          <ul class="icons">
+            <li>
+              <a
+                href="https://twitter.com/_ByCyril"
+                class="icon brands fa-twitter"
+                ><span class="label">Twitter</span></a
+              >
+            </li>
+            <li>
+              <a href="#" class="icon solid fa-envelope"
+                ><span class="label">Email</span></a
+              >
+            </li>
+          </ul>
+          <p class="copyright">
+            Developed and Designed
+            <a href="https://bycyril.com">by Cyril</a> &copy; 2020
+          </p>
+        </section>
+      </section>
+    </div>
+
+    <script src="https://www.gstatic.com/firebasejs/7.17.2/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.17.2/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.17.2/firebase-database.js"></script>
+
+    <!-- Scripts -->
+    <script src="assets/js/jquery.min.js"></script>
+    <script src="assets/js/browser.min.js"></script>
+    <script src="assets/js/breakpoints.min.js"></script>
+    <script src="assets/js/util.js"></script>
+    <script src="assets/js/main.js"></script>
+    <script src="assets/js/firebase.js"></script>
+    <script src="assets/js/category.js"></script>
+
+    <script>
+      queryItemsWith("statistics");
+    </script>
+  </body>
+</html>
