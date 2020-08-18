@@ -75,6 +75,7 @@ function preview() {
   var subtitle = document.getElementById("subtitle").value;
   var firstBody = document.getElementById("body-0").value;
   let title = createTitle(articleTitle, subtitle);
+  let category = document.getElementById("category").value;
 
   let preview = createHomePagePreview(articleTitle, firstBody, subtitle);
   var ts = Math.round(new Date().getTime() / 1000);
@@ -85,6 +86,7 @@ function preview() {
     title: articleTitle,
     preview: preview,
     timestamp: ts,
+    category: category,
   };
 }
 
@@ -112,9 +114,7 @@ function createTitle(title, subtitle) {
 function post() {
   preview();
   if (confirm("Confirm to Post!")) {
-    var articleTitle = "";
-    var value = document.getElementById("title").value;
-
+    let value = document.getElementById("title").value;
     database.ref(dash(value)).set(thread);
   }
 }
