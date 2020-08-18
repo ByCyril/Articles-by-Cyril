@@ -14,9 +14,9 @@ function timestamp() {
 
 function createTitle(title, subtitle) {
   let publishDate = timestamp()[0];
-  return `<header><div class='title'><h2><a href='#'>${title}</a></h2><p>${subtitle}</p></div><div class='meta'><time class='published' datetime='${
+  return `<header><div class='title'><h2>${title}</h2><p>${subtitle}</p></div><div class='meta'><time class='published' datetime='${
     timestamp()[1]
-  }'>${publishDate}</time><a href='#' class='author'><span class='name'>Cyril Garcia</span><img src='images/avatar.jpg' alt=''/></a></div></header>`;
+  }'>${publishDate}</time><p class='author'><span class='name'>Cyril Garcia</span><img src='images/avatar.jpg' alt=''/></p></div></header>`;
 }
 
 function createBody(text) {

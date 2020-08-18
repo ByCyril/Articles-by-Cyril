@@ -24,10 +24,12 @@ function init() {
 
 function authenticate() {
   //   prettier-ignore
-  firebase.auth().signInWithEmailAndPassword("admin@admin.como", "123321").then(function(succ) {
+  firebase.auth().signInWithEmailAndPassword("admin@admin.com", "123321").then(function(succ) {
     $("#toolbar").show();
+    console.log(succ)
   }).catch(function (err) {
     $("#toolbar").hide();
+    console.log(err)
   });
 }
 
@@ -103,13 +105,6 @@ function timestamp() {
   let todayStr = mm + " " + dd + ", " + yyyy;
 
   return [todayStr, t, today];
-}
-
-function createTitle(title, subtitle) {
-  let publishDate = timestamp()[0];
-  return `<header><div class='title'><h2><a href='#'>${title}</a></h2><p>${subtitle}</p></div><div class='meta'><time class='published' datetime='${
-    timestamp()[1]
-  }'>${publishDate}</time><a href='#' class='author'><span class='name'>Cyril Garcia</span><img src='images/avatar.jpg' alt=''/></a></div></header>`;
 }
 
 function post() {
